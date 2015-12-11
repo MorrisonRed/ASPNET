@@ -8,9 +8,17 @@
     <li>Google Fonts</li>
     <li>SQL Server 2012</li>
     <li>Entity Framework 6.0</li>
+    <li>ASP.Net Identity 2.1</li>
+    <li>IoC - Inversion Of Control</li>
     <li>
       Images provided by <a href="http://unsplash.com/" target="_blank">Unsplash</a>
     </li>
+  </ul>
+</p>
+
+<p>
+  <ul>
+    <li>Custom Controller Factory</li>
   </ul>
 </p>
 

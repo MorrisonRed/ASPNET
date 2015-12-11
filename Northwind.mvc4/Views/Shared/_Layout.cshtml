@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNet.Identity
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -25,8 +26,27 @@
 
         </div>
         <div class="container">
-            <div class="navbar-header">
-                <a href="/admin/" name="contactUs" id="contactUS" class="btn-button-transparent pull-right">Admin</a>
+            <div class="navbar-header">         
+                @if (Request.IsAuthenticated)
+                {
+                    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm"}))
+                    {
+                        @Html.AntiForgeryToken()
+                        <a href="javascript:document.getElementById('logoutForm').submit()" class="pull-right" style="padding-top:10px;color:white;">
+                            Log off</a>
+                        <a href="/manage" class="pull-right" style="padding-right:5px;padding-top:10px;color:white;">
+                            Hello @User.Identity.GetUserName()!</a>
+
+                        <a href="/admin/" name="contactUs" id="contactUS" class="btn-button-transparent pull-right">Admin</a>                      
+                        // @Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
+                    }
+                }
+                else
+                {
+                    @Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { @id = "registerLink", @class = "btn-button-transparent pull-right" })
+                    @Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { @id = "loginLink", @class = "btn-button-transparent pull-right" })
+                }
+
                 @Html.ActionLink("Contact", "Contact", "Home", new { @class = "btn-button-transparent pull-right" })
             </div>
         </div>

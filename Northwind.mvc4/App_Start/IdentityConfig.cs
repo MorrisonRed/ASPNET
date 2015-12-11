@@ -88,6 +88,22 @@ namespace ASPNET
         }
     }
 
+    // Configure the application role manager used in this application. RoleManager is defined in ASP.NET Identity and is used by the application.
+    public class ApplicationRoleManager : RoleManager<IdentityRole>
+    {
+        public ApplicationRoleManager(IRoleStore<IdentityRole, string> roleStore)
+            : base(roleStore)
+        {
+        }
+
+        public static ApplicationRoleManager Create(IdentityFactoryOptions<ApplicationRoleManager> options, IOwinContext context)
+        {
+            var appRoleManager = new ApplicationRoleManager(new RoleStore<IdentityRole>(context.Get<ApplicationDbContext>()));
+
+            return appRoleManager;
+        }
+    }
+
     // Configure the application sign-in manager which is used in this application.
     public class ApplicationSignInManager : SignInManager<ApplicationUser, string>
     {
@@ -106,4 +122,5 @@ namespace ASPNET
             return new ApplicationSignInManager(context.GetUserManager<ApplicationUserManager>(), context.Authentication);
         }
     }
+
 }

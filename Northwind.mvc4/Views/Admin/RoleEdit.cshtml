@@ -1,0 +1,102 @@
+﻿@model ASPNET.Models.ApplicationRole
+@{
+    ViewBag.Title = "Edit Role";
+}
+
+
+<div class="row">
+    <div class='col-sm-12'>
+        <ul class="breadcrumb">
+            <li><a href="/">Home</a></li>
+            <li><a href="/admin">Administration</a></li>
+            <li><a href="/admin/roles">Roles</a></li>
+            <li class="active">Add Role</li>
+        </ul>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="well">
+            <!-- Blank Forms Post Back to themselves-->
+            @using (Html.BeginForm("RoleEdit", "Admin", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+            {
+                @Html.AntiForgeryToken()
+
+                if (!String.IsNullOrEmpty(ViewBag.Message))
+                {
+                    <div class='alert alert-success' role='alert'>
+                        <span class='glyphicon glyphicon-ok' aria-hidden='true'></span>
+                        <span class='sr-only'>Success: </span>
+                        @ViewBag.Message
+                    </div>
+                }
+                if (!Html.ViewData.ModelState.IsValid)
+                {
+                    <div class='alert alert-danger' role='alert'>
+                        <span class='glyphicon glyphicon-exclamation-sign' aria-hidden='true'></span>
+                        <span class='sr-only'>Error:</span>
+                        @Html.ValidationSummary("")
+                    </div>
+                }       
+
+                @Html.HiddenFor(m => m.Id)
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Name, new { @class = "text-left col-md-3 control-label" })
+                    <div class="col-md-8">
+                        @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-group text-left">
+                    @Html.LabelFor(m => m.IsSytemAccount, new { @class = "col-md-3 control-label text-left" })
+                    <div class="col-md-8 text-left">
+                        @Html.CheckBoxFor(m => m.IsSytemAccount, new { @class = "form-control form-checkbox" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" class="btn btn-default" value="Save" />
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="well">
+            At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis
+            praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias
+            excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui
+            officia deserunt mollitia animi.
+        </div>
+    </div>
+
+</div>
+       
+<section>
+
+
+    <asp:TextBox ID="txtRoleName" runat="server" Text="" />
+    <asp:Button ID="btnSubmit" runat="server" Text="Add" CssClass="button" OnClick="btnSubmit_Click" />
+    <asp:Button ID="btnCancel" runat="server" Text="Cancel" CssClass="button" PostBackUrl="/Manage/Roles" />
+</section>
+
+@section Scripts
+{
+    @Styles.Render("~/Scripts/footable-v2/css/footable.standalone.css")
+    @Scripts.Render("~/Scripts/footable-v2/js/footable.js")
+
+    <style type="text/css">
+    </style>
+    <script type="text/javascript">
+        jQuery(function ($) {
+            $('.table').footable();
+
+            $('.table').bind('footable_breakpoint', function () {
+                $('.table').trigger('footable_expand_first_row');
+            });
+        });
+    </script>
+}
+

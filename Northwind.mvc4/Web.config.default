@@ -21,6 +21,16 @@
     <add key="UnobtrusiveJavaScriptEnabled" value="true"/>
     <add key="supportEmail" value="YOUR EMAIL"/>
     <add key="salesEmail" value="YOUR EMAIL"/>
+
+    <!-- LEAVE BLANK TO DISABLE -->
+    <add key="FacebookAppId" value="" />
+    <add key="FacebookAppSecret" value="" />
+    <add key="TwitterConsumerKey" value="" />
+    <add key="TwitterConsumerSecret" value="" />
+    <add key="MicrosoftClientId" value=""  />
+    <add key="MicrosoftClientSecret" value="" />
+    <add key="GooglePlusClientID" value="" />
+    <add key="GooglePlusClientSecret" value="" />
   </appSettings>
   <system.web>
     <authentication mode="None"/>

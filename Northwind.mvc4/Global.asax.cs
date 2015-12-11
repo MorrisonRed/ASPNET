@@ -6,6 +6,11 @@ using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 
+using AppCore;
+using System.Data.Entity;
+using ASPNET.Models;
+
+
 namespace ASPNET
 {
     public class MvcApplication : System.Web.HttpApplication
@@ -16,6 +21,12 @@ namespace ASPNET
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+
+            //implementation of Customer Controller Factory
+            var factory = new CustomControllerFactory();
+            ControllerBuilder.Current.SetControllerFactory(factory);
+
+            //Database.SetInitializer<ApplicationDbContext>(new DropCreateDatabaseIfModelChanges<ApplicationDbContext>());
         }
     }
 }

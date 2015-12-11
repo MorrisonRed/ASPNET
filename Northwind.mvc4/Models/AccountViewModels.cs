@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
+using System;
+
 namespace ASPNET.Models
 {
     public class ExternalLoginConfirmationViewModel
@@ -48,10 +50,13 @@ namespace ASPNET.Models
 
     public class LoginViewModel
     {
-        [Required]
         [Display(Name = "Email")]
         [EmailAddress]
         public string Email { get; set; }
+
+        [Required]
+        [Display(Name = "Username")]
+        public string UserName { get; set; }
 
         [Required]
         [DataType(DataType.Password)]
@@ -79,6 +84,29 @@ namespace ASPNET.Models
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
+
+        //custom properties added to identiy user
+        [Required]
+        [Display(Name = "User Name")]
+        public virtual string UserName { get; set; }
+        [Required]
+        [Display(Name = "First Name")]
+        public virtual string FirstName { get; set; }
+        [Required]
+        [Display(Name = "Last Name")]
+        public virtual string LastName { get; set; }
+        [Required]
+        [Display(Name = "Gender")]
+        public virtual string Gender { get; set; }
+        [DataType(DataType.DateTime)]
+        [Display(Name = "Date Of Birth")]
+        public virtual DateTime? DateOfBirth { get; set; }
+        [Display(Name = "Language")]
+        public virtual string Language { get; set; }
+        [Display(Name = "Country")]
+        public virtual string Country { get; set; }
+        [Display(Name = "Postal Code")]
+        public virtual string PostalCode { get; set; }
     }
 
     public class ResetPasswordViewModel

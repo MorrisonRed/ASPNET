@@ -7,7 +7,7 @@
         <div class="well">
             <ul class="list-unstyled">
                 <li>
-                    <a href="/store/productsearch.php">Browse our products</a>
+                    @Html.ActionLink(linkText: "Browse our products", controllerName: "Store", actionName: "Products");
                 </li>
                 <li>
                     <a href="/store/shoppingcart.php">Show my ordered products</a>

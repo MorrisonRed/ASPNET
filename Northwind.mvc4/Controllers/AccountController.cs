@@ -10,6 +10,8 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using ASPNET.Models;
 
+using System.Configuration;
+
 namespace ASPNET.Controllers
 {
     [Authorize]
@@ -75,7 +77,7 @@ namespace ASPNET.Controllers
 
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
-            var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
+            var result = await SignInManager.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe, shouldLockout: false);
             switch (result)
             {
                 case SignInStatus.Success:
@@ -151,12 +153,30 @@ namespace ASPNET.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                //var user = new ApplicationUser { UserName = model.UserName, Email = model.Email };
+
+                var user = new ApplicationUser()
+                {
+                    UserName = model.UserName,
+                    Email = model.Email,
+                    FirstName = model.FirstName,
+                    LastName = model.LastName,
+                    Gender = model.Gender,
+                    DateOfBirth = model.DateOfBirth,
+                    Language = model.Language,
+                    Country = model.Country,
+                    PostalCode = model.PostalCode
+                };
+
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
                     await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
-                    
+
+                    //add users to a default role defined in the web config
+                    var rolename = ConfigurationManager.AppSettings.Get("defaultRole");
+                    var roleresult = UserManager.AddToRole(user.Id, rolename);
+
                     // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link
                     // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
