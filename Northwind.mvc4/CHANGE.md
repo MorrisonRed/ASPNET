@@ -1,12 +1,21 @@
 ﻿# Northwind.mvc4 Changelog
 
+### Version 0.0.4
+<small><i>January 3, 2016</i></small>
+
+* **Add and Edit User Management Pages**<br/>
+<ul>
+<li>Added User List Page</li>
+<li>Added User Edit Page</li>
+<li>Added User Add Page</li>
+</ul>
+
 ### Version 0.0.3
 <small><i>December 9, 2015</i></small>
 
 * **Added User Registration and Login**<br/>
 <ul>
 <li>Added User Login and Registration Page</li>
-<li>Added Role Management Pages for Add/Edit/Delete Roles</li>
 </ul>
 
 ### Version 0.0.2

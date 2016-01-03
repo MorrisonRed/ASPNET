@@ -411,6 +411,42 @@ namespace ASPNET.Models
 
             return View(model);
         }
+
+        public ActionResult UserDelete(string id = "")
+        {
+            ViewBag.PageTitle = "Delete User";
+            ViewBag.Message = "";
+
+            var user = UserManager.FindById(id);
+            if (user == null)
+            {
+                return HttpNotFound();
+            }
+            return View(user);
+        }
+        [HttpPost, ActionName("UserDelete")]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> DeleteDeleteConfirmed(string id)
+        {
+            var user = await UserManager.FindByIdAsync(id);
+
+            if (user != null)
+            {
+                IdentityResult result = await UserManager.DeleteAsync(user);
+
+                if (!result.Succeeded)
+                {
+                    ViewBag.Message = "User deleted!";
+                    ViewBag.Message = result.Errors.ToString();
+                    return View(user);
+                }
+
+                return RedirectToAction("Users", "Admin");
+            }
+
+            // Not Found
+            return HttpNotFound();
+        }
         #endregion 
 
         #region Helpers
