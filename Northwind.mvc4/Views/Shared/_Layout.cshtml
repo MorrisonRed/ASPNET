@@ -37,7 +37,7 @@
                         <a href="/manage" class="pull-right" style="padding-right:5px;padding-top:10px;color:white;">
                             Hello @User.Identity.GetUserName()!</a>
 
-                        <a href="/admin/" name="contactUs" id="contactUS" class="btn-button-transparent pull-right">Admin</a>                      
+                        <a href="/admin/" name="contactUs" id="contactUS" class="btn-button-transparent pull-right">Manage</a>                      
                         // @Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
                     }
                 }
@@ -60,7 +60,7 @@
                         <span style="font-family:Cinzel;">North</span>
                         <span style="font-family:Courgette;margin-left:-12px;">Wind</span>
                     </a>
-                    Demo Store
+                    Demo Store <sup>MVC 4</sup>
                 </h1>
                 <h3>@ViewBag.Title</h3>
             </div>

@@ -57,6 +57,7 @@
                 <div class="form-group">
                     <div class="col-md-offset-2 col-md-10">
                         <input type="submit" class="btn btn-default" value="Save" />
+                        @Html.ActionLink("Cancel", "Roles", "Admin", new { @class = "btn btn-default" })
                     </div>
                 </div>
             }
@@ -74,13 +75,6 @@
 
 </div>
        
-<section>
-
-
-    <asp:TextBox ID="txtRoleName" runat="server" Text="" />
-    <asp:Button ID="btnSubmit" runat="server" Text="Add" CssClass="button" OnClick="btnSubmit_Click" />
-    <asp:Button ID="btnCancel" runat="server" Text="Cancel" CssClass="button" PostBackUrl="/Manage/Roles" />
-</section>
 
 @section Scripts
 {
@@ -91,11 +85,7 @@
     </style>
     <script type="text/javascript">
         jQuery(function ($) {
-            $('.table').footable();
 
-            $('.table').bind('footable_breakpoint', function () {
-                $('.table').trigger('footable_expand_first_row');
-            });
         });
     </script>
 }

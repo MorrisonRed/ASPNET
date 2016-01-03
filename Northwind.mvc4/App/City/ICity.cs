@@ -6,7 +6,12 @@ using System.Threading.Tasks;
 
 namespace AppCore.City
 {
-    interface ICity
+    public interface ICity
     {
+        int ID { get; set; }
+        string Name { get; set; }
+        string CountryCode { get; set; }
+        string District { get; set; }
+        int Population { get; set; }
     }
 }

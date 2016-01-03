@@ -1,0 +1,151 @@
+﻿@model ASPNET.Models.UserEditViewModel
+@{
+    ViewBag.Title = "New User";
+}
+
+
+<div class="row">
+    <div class='col-sm-12'>
+        <ul class="breadcrumb">
+            <li><a href="/">Home</a></li>
+            <li><a href="/admin">Administration</a></li>
+            <li><a href="/admin/users">Users</a></li>
+            <li class="active">Edit User</li>
+        </ul>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="well">
+            <!-- Blank Forms Post Back to themselves-->
+            @using (Html.BeginForm("UserEdit", "Admin", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+            {
+                @Html.AntiForgeryToken()
+
+                if (!String.IsNullOrEmpty(ViewBag.Message))
+                {
+                    <div class='alert alert-success' role='alert'>
+                        <span class='glyphicon glyphicon-ok' aria-hidden='true'></span>
+                        <span class='sr-only'>Success: </span>
+                        @ViewBag.Message
+                    </div>
+                }
+
+                if (!Html.ViewData.ModelState.IsValid)
+                {
+                    <div class='alert alert-danger' role='alert'>
+                        <span class='glyphicon glyphicon-exclamation-sign' aria-hidden='true'></span>
+                        <span class='sr-only'>Error:</span>
+                        @Html.ValidationSummary("")
+                    </div>
+                }
+
+                @Html.HiddenFor(m => m.Id)
+                <div class="form-group">
+                    @Html.LabelFor(m => m.UserName, new { @class = "col-md-4 control-label" })
+                    <div class="col-md-8">
+                        @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", autocomplete = "off" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Email, new { @class = "col-md-4 control-label" })
+                    <div class="col-md-8">
+                        @Html.TextBoxFor(m => m.Email, new { @class = "form-control", autocomplete = "off" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-md-4 control-label">Role</label>
+                    <div class="col-md-8">
+                        @Html.DropDownListFor(m => m.SelectedRoleID, Model.Roles, new { @class = "form-control" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(m => m.FirstName, new { @class = "col-md-4 control-label" })
+                    <div class="col-md-8">
+                        @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control", autocomplete = "off" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.LastName, new { @class = "col-md-4 control-label" })
+                    <div class="col-md-8">
+                        @Html.TextBoxFor(m => m.LastName, new { @class = "form-control", autocomplete = "off" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Gender, new { @class = "col-md-4 control-label" })
+                    <div class="col-md-8">
+                        @Html.DropDownList("Gender", (IEnumerable<SelectListItem>)ViewBag.Genders, new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.DateOfBirth, new { @class = "col-md-4 control-label" })
+                    <div class="col-md-8">
+                        <input type="text" class="form-control datepicker" name="DateOfBirth" id="DateOfBirth"
+                            value='@Html.ValueFor(model => model.DateOfBirth, "{0:yyyy-MM-dd}")' />
+                        @*@Html.TextBoxFor(m => m.DateOfBirth, new { @class = "form-control datepicker" })*@
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Language, new { @class = "col-md-4 control-label" })
+                    <div class="col-md-8">
+                        @Html.DropDownList("Lanaguage", (IEnumerable<SelectListItem>)ViewBag.Languages, new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Country, new { @class = "col-md-4 control-label" })
+                    <div class="col-md-8">
+                        @Html.DropDownList("Country", (IEnumerable<SelectListItem>)ViewBag.Countries, new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.PostalCode, new { @class = "col-md-4 control-label" })
+                    <div class="col-md-8">
+                        @Html.TextBoxFor(m => m.PostalCode, new { @class = "form-control" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" class="btn btn-default" value="Save" />
+                        @Html.ActionLink("Cancel", "Users", "Admin", new { @class = "btn btn-default"})
+                     </div>
+                </div>
+            }
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="well">
+            At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis
+            praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias
+            excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui
+            officia deserunt mollitia animi.
+        </div>
+    </div>
+
+</div>
+       
+
+@section Scripts
+{
+    @Styles.Render("~/Scripts/footable-v2/css/footable.standalone.css")
+    @Scripts.Render("~/Scripts/footable-v2/js/footable.js")
+
+    <style type="text/css">
+    </style>
+    <script type="text/javascript">
+        jQuery(function ($) {
+            $('.datepicker').datepicker({
+                format: "yyyy-mm-dd",
+                maxViewMode: 1,
+                todayBtn: true
+            });
+
+
+        });
+    </script>
+}
+
