@@ -1,6 +1,6 @@
-﻿@model ASPNET.Models.ApplicationRole
+﻿@model ASPNET.Models.CategoryAddViewModel
 @{
-    ViewBag.Title = "Edit Role";
+    ViewBag.Title = "Add Category";
 }
 
 
@@ -9,21 +9,20 @@
         <ul class="breadcrumb">
             <li><a href="/">Home</a></li>
             <li><a href="/admin">Administration</a></li>
-            <li><a href="/admin/roles">Roles</a></li>
-            <li class="active">Edit Role</li>
+            <li><a href="/admin/categories">Categories</a></li>
+            <li class="active">Add Category</li>
         </ul>
     </div>
 </div>
 
+<!-- Blank Forms Post Back to themselves-->
+@using (Html.BeginForm("CategoryAdd", "Admin", FormMethod.Post, new { @class = "form-horizontal", role = "form", enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
 <div class="row">
     <div class="col-md-8">
         <div class="well">
-            <!-- Blank Forms Post Back to themselves-->
-            @using (Html.BeginForm("RoleEdit", "Admin", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
-            {
-                @Html.AntiForgeryToken()
-
-                if (!String.IsNullOrEmpty(ViewBag.Message))
+                @if (!String.IsNullOrEmpty(ViewBag.Message))
                 {
                     <div class='alert alert-success' role='alert'>
                         <span class='glyphicon glyphicon-ok' aria-hidden='true'></span>
@@ -31,36 +30,41 @@
                         @ViewBag.Message
                     </div>
                 }
-                if (!Html.ViewData.ModelState.IsValid)
+                @if (!Html.ViewData.ModelState.IsValid)
                 {
                     <div class='alert alert-danger' role='alert'>
                         <span class='glyphicon glyphicon-exclamation-sign' aria-hidden='true'></span>
                         <span class='sr-only'>Error:</span>
                         @Html.ValidationSummary("")
                     </div>
-                }       
+                }
 
-                @Html.HiddenFor(m => m.Id)
                 <div class="form-group">
-                    @Html.LabelFor(m => m.Name, new { @class = "text-left col-md-3 control-label" })
+                    @Html.LabelFor(m => m.CategoryName, new { @class = "text-left col-md-3 control-label" })
                     <div class="col-md-8">
-                        @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+                        @Html.TextBoxFor(m => m.CategoryName, new { @class = "form-control" })
                     </div>
                 </div>
-                <div class="form-group text-left">
-                    @Html.LabelFor(m => m.IsSytemAccount, new { @class = "col-md-3 control-label text-left" })
-                    <div class="col-md-8 text-left">
-                        @Html.CheckBoxFor(m => m.IsSytemAccount, new { @class = "form-control form-checkbox" })
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Description, new { @class = "text-left col-md-3 control-label" })
+                    <div class="col-md-8">
+                        @Html.TextAreaFor(m => m.Description, new { @class = "form-control", cols = "20", rows = "10" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Picture, new { @class = "text-left col-md-3 control-lable" })
+                    <div class="col-md-8">
+                        <input type="file" class="form-control" id="NewPicture" name="NewPicture" />
                     </div>
                 </div>
 
                 <div class="form-group">
                     <div class="col-md-offset-2 col-md-10">
                         <input type="submit" class="btn btn-default" value="Save" />
-                        @Html.ActionLink("Cancel", "Roles", "Admin", new { @class = "btn btn-default" })
+                        @Html.ActionLink("Cancel", "Categories", "Admin", new { @class = "btn btn-default" })
                     </div>
                 </div>
-            }
         </div>
     </div>
 
@@ -72,9 +76,8 @@
             officia deserunt mollitia animi.
         </div>
     </div>
-
 </div>
-       
+}      
 
 @section Scripts
 {

@@ -396,7 +396,7 @@ namespace ASPNET.Models
                         }
                     }
                     ViewBag.Message = "User updated!";
-                    View();
+                    return View();
                 }
                 AddErrors(result);
             }
@@ -426,7 +426,7 @@ namespace ASPNET.Models
         }
         [HttpPost, ActionName("UserDelete")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> DeleteDeleteConfirmed(string id)
+        public async Task<ActionResult> UserDeleteConfirmed(string id)
         {
             var user = await UserManager.FindByIdAsync(id);
 
@@ -447,7 +447,174 @@ namespace ASPNET.Models
             // Not Found
             return HttpNotFound();
         }
-        #endregion 
+        #endregion
+
+        #region Categories
+        public ActionResult Categories(string searchterm)
+        {
+            IQueryable<AppCore.Category.Category> categories;
+            var categoryRepository = new AppCore.Category.CategoryRepository<AppCore.Category.Category>(ConfigurationManager.ConnectionStrings["DefaultConnection"].ToString());
+            if (string.IsNullOrEmpty(searchterm))
+            {
+                categories = categoryRepository.GetCategories().OrderBy(c => c.CategoryName);
+            }
+            else
+            {
+                categories = categoryRepository.GetCategories().Where(c => c.CategoryName.ToLower().Contains(searchterm.ToLower())).OrderBy(c => c.CategoryName);
+            }
+
+            return View(categories);
+        }
+
+        public ActionResult CategoryAdd()
+        {
+            ViewBag.Title = "Add Category";
+            ViewBag.Message = "";
+
+            return View();
+
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> CategoryAdd(CategoryAddViewModel model, FormCollection form, HttpPostedFileBase NewPicture)
+        {
+            if (ModelState.IsValid)
+            {
+                var categoryRepository = new AppCore.Category.CategoryRepository<AppCore.Category.Category>(ConfigurationManager.ConnectionStrings["DefaultConnection"].ToString());
+                AppCore.Category.Category cat = new AppCore.Category.Category();
+                cat.CategoryName = model.CategoryName;
+                cat.Description = model.Description;
+                if (NewPicture != null && NewPicture.ContentLength > 0)
+                {
+                    string filetype = NewPicture.ContentType;
+                    Int32 length = NewPicture.ContentLength;
+                    byte[] tempImage = new byte[length];
+                    NewPicture.InputStream.Read(tempImage, 0, length);
+                    cat.Picture = tempImage;
+                    model.Picture = tempImage;
+                }
+
+                var result = categoryRepository.Add(cat);
+                if (result)
+                {
+                    ViewBag.Message = "Category added!";
+                    model = new CategoryAddViewModel();
+                    ModelState.Clear();
+                    return View(model);
+                }
+                ModelState.AddModelError("", new Exception("failed to add category"));
+                //AddErrors(result);
+            }
+
+            return View(model);
+        }
+       
+        public ActionResult CategoryEdit(int id)
+        {
+            ViewBag.PageTitle = "Edit Category";
+            ViewBag.Message = "";
+
+            var categoryRepository = new AppCore.Category.CategoryRepository<AppCore.Category.Category>(ConfigurationManager.ConnectionStrings["DefaultConnection"].ToString());
+            var category = categoryRepository.FindById(id);
+            if (category == null)
+            {
+                //category did not load go to error page
+                return RedirectToAction("Error", "Home");
+            }
+
+            CategoryEditViewModel model = new CategoryEditViewModel() {
+                CategoryId = category.CategoryId,
+                CategoryName = category.CategoryName,
+                Description = category.Description,
+                Picture = category.Picture
+            };
+
+            return View(model);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> CategoryEdit(CategoryEditViewModel model, FormCollection form, HttpPostedFileBase NewPicture)
+        {
+            if (ModelState.IsValid)
+            {
+                //load category and update values
+                var categoryRepository = new AppCore.Category.CategoryRepository<AppCore.Category.Category>(ConfigurationManager.ConnectionStrings["DefaultConnection"].ToString());
+                var cat = categoryRepository.FindById(model.CategoryId);
+
+                //get picture
+                if (NewPicture != null && NewPicture.ContentLength > 0)
+                {
+                    string filetype = NewPicture.ContentType;
+                    Int32 length = NewPicture.ContentLength;
+                    byte[] tempImage = new byte[length];
+                    NewPicture.InputStream.Read(tempImage, 0, length);
+                    cat.Picture = tempImage;
+                    model.Picture = tempImage;
+                }
+                
+                cat.CategoryName = model.CategoryName;
+                cat.Description = model.Description;
+ 
+                //update category        
+                var result = categoryRepository.Update(cat);
+                if(result)
+                {
+
+                    ViewBag.Message = "Category updated!";
+                    return View(model);
+                }
+                ModelState.AddModelError("", new Exception("failed to update category"));
+                //AddErrors(result);
+            }
+            return View(model);
+        }
+
+        public ActionResult CategoryDelete(int id = 0)
+        {
+            ViewBag.PageTitle = "Delete Category";
+            ViewBag.Message = "";
+
+            var categoryRepository = new AppCore.Category.CategoryRepository<AppCore.Category.Category>(ConfigurationManager.ConnectionStrings["DefaultConnection"].ToString());
+            var cat = categoryRepository.FindById(id);
+            if (cat.IsEmpty())
+            {
+                return HttpNotFound();
+            }
+            var model = new CategoryDeleteViewModel()
+            {
+                CategoryId = cat.CategoryId,
+                CategoryName = cat.CategoryName,
+                Description = cat.Description,
+                Picture = cat.Picture
+            };
+            return View(model);
+        }
+        [HttpPost, ActionName("CategoryDelete")]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> CategoryDeleteConfirmed(int id)
+        {
+            var categoryRepository = new AppCore.Category.CategoryRepository<AppCore.Category.Category>(ConfigurationManager.ConnectionStrings["DefaultConnection"].ToString());
+            var cat = categoryRepository.FindById(id);
+
+            if (!cat.IsEmpty())
+            {
+                var result = categoryRepository.Delete(cat);   
+
+                if (result)
+                {
+                    ViewBag.Message = "Category deleted!";
+                    var model = new CategoryDeleteViewModel();                 
+                    //ModelState.Clear();
+                    return View(model);
+                }
+
+                return RedirectToAction("Categories", "Admin");
+            }
+
+            // Not Found
+            return HttpNotFound();
+        }
+        #endregion
 
         #region Helpers
         // Used for XSRF protection when adding external logins

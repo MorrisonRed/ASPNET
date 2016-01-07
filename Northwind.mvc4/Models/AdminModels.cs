@@ -59,7 +59,6 @@ namespace ASPNET.Models
         [Display(Name = "Postal Code")]
         public virtual string PostalCode { get; set; }
     }
-
     public class UserEditViewModel
     {
         public string SelectedRoleID { get; set; }
@@ -97,5 +96,42 @@ namespace ASPNET.Models
         public virtual string Country { get; set; }
         [Display(Name = "Postal Code")]
         public virtual string PostalCode { get; set; }
+    }
+
+    public class CategoryAddViewModel
+    {
+        [Required]
+        [Display(Name = "Name")]
+        public string CategoryName { get; set; }
+        [Display(Name = "Description")]
+        public string Description { get; set; }
+        [Display(Name = "Picture")]
+        public byte[] Picture { get; set; }
+    }
+    public class CategoryEditViewModel
+    {
+        [Required]
+        [Display(Name = "Id")]
+        public int CategoryId { get; set; }
+        [Required]
+        [Display(Name = "Name")]
+        public string CategoryName { get; set; }
+        [Display(Name = "Description")]
+        public string Description { get; set; }
+        [Display(Name = "Picture")]
+        public byte[] Picture { get; set; }
+    }
+    public class CategoryDeleteViewModel
+    {
+        [Required]
+        [Display(Name = "Id")]
+        public int CategoryId { get; set; }
+        [Required]
+        [Display(Name = "Name")]
+        public string CategoryName { get; set; }
+        [Display(Name = "Description")]
+        public string Description { get; set; }
+        [Display(Name = "Picture")]
+        public byte[] Picture { get; set; }
     }
 }

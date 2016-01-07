@@ -6,7 +6,13 @@ using System.Threading.Tasks;
 
 namespace AppCore.Category
 {
-    interface ICategory
+    public interface ICategory
     {
+        int CategoryId { get; set; }
+        string CategoryName { get; set; }
+        string Description { get; set; }
+        byte[] Picture { get; set; }
+
+        bool IsEmpty();
     }
 }

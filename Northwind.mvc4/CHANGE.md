@@ -1,5 +1,15 @@
 ﻿# Northwind.mvc4 Changelog
 
+### Version 0.0.5
+<small><i>January 6, 2016</i></small>
+
+* **Add and Edit Category Pages**<br/>
+<ul>
+<li>Added Category List Page</li>
+<li>Added Category Edit Page</li>
+<li>Added Category Add Page</li>
+
+</ul>
 ### Version 0.0.4
 <small><i>January 3, 2016</i></small>
 
