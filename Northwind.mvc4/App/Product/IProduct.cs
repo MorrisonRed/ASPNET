@@ -18,5 +18,7 @@ namespace AppCore.Product
         int UnitsOnOrder { get; set; }
         int ReorderLevel { get; set; }
         bool Discontinued { get; set; }
+
+        bool IsEmpty();
     }
 }

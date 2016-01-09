@@ -30,5 +30,22 @@ namespace AppCore.Product
         public int ReorderLevel { get; set; }
         [Display(Name = "Discontinued")]
         public bool Discontinued { get; set; }
+
+        #region Functions and Methods
+        public bool IsEmpty()
+        {
+            bool result = true;
+            if (ProductID > 0) return false;
+            if (SupplierID > 0) return false;
+            if (CategoryID > 0) return false;
+            if (!String.IsNullOrEmpty(QuantityPerUnit)) return false;
+            if (UnitPrice > 0) return false;
+            if (UnitsInStock > 0) return false;
+            if (UnitsOnOrder > 0) return false;
+            if (ReorderLevel > 0) return false;
+
+            return result;
+        }
+        #endregion
     }
 }

@@ -1,0 +1,181 @@
+﻿@model ASPNET.Models.ProductEditViewModel
+@{
+    ViewBag.Title = "Edit Product";
+}
+
+
+<div class="row">
+    <div class='col-sm-12'>
+        <ul class="breadcrumb">
+            <li><a href="/">Home</a></li>
+            <li><a href="/admin">Administration</a></li>
+            <li><a href="/admin/products">Products</a></li>
+            <li class="active">Edit Product</li>
+        </ul>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="well">
+            <!-- Blank Forms Post Back to themselves-->
+            @using (Html.BeginForm("ProductEdit", "Admin", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+            {
+                @Html.AntiForgeryToken()
+
+                if (!String.IsNullOrEmpty(ViewBag.Message))
+                {
+                    <div class='alert alert-success' role='alert'>
+                        <span class='glyphicon glyphicon-ok' aria-hidden='true'></span>
+                        <span class='sr-only'>Success: </span>
+                        @ViewBag.Message
+                    </div>
+                }
+
+                if (IsPost)
+                { 
+                    if (!Html.ViewData.ModelState.IsValid)
+                    {
+                        <div class='alert alert-danger' role='alert'>
+                            <span class='glyphicon glyphicon-exclamation-sign' aria-hidden='true'></span>
+                            <span class='sr-only'>Error:</span>
+                            @Html.ValidationSummary("")
+                        </div>
+                    }
+                 }
+
+                @Html.HiddenFor(m => m.ProductID)
+                <div class="form-group">
+                    @Html.LabelFor(m => m.ProductName, new { @class = "col-md-4 control-label" })
+                    <div class="col-md-8">
+                        @Html.TextBoxFor(m => m.ProductName, new { @class = "form-control", autocomplete = "off", placeholder = "Widget 3000" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-md-4 control-label">Category</label>
+                    <div class="col-md-8">
+                        @Html.DropDownListFor(m => m.SelectedCategoryID, Model.Categories, new { @class = "form-control" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-md-4 control-label">Supplier</label>
+                    <div class="col-md-8">
+                        @Html.DropDownListFor(m => m.SelectedSupplierID, Model.Suppliers, new { @class = "form-control" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(m => m.QuantityPerUnit, new { @class = "col-md-4 control-label" })
+                    <div class="col-md-8">
+                        @Html.TextBoxFor(m => m.QuantityPerUnit, new { @class = "form-control", placeholder = "2 per box" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(m => m.UnitPrice, new { @class = "col-md-4 control-label" })
+                    <div class="col-md-8">
+                        <div class="input-group">
+                            <span class="input-group-addon">$</span>
+                            @{var formated = String.Format("{0:0.00}", Model.UnitPrice);}
+                            @Html.TextBoxFor(m => m.UnitPrice, formated, new
+                               {
+                                   @class = "form-control currenciesOnly",
+                                   type = "number",
+                                   autocomplete = "off",
+                                   placeholder = "0.00"
+                               })
+                        </div>                       
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.UnitsInStock, new { @class = "col-md-4 control-label" })
+                    <div class="col-md-8">
+                        <div class="input-group">
+                            <span class="input-group-addon">#</span>
+                            @Html.TextBoxFor(m => m.UnitsInStock, new
+                               {
+                                   @class = "form-control number",
+                                   type = "number",
+                                   autocomplete = "off",
+                                   placeholder = "0"
+                               })
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.UnitsOnOrder, new { @class = "col-md-4 control-label" })
+                    <div class="col-md-8">
+                        <div class="input-group">
+                            <span class="input-group-addon">#</span>
+                            @Html.TextBoxFor(m => m.UnitsOnOrder, new
+                               {
+                                   @class = "form-control number",
+                                   type = "number",
+                                   autocomplete = "off",
+                                   placeholder = "0"
+                               })
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.ReorderLevel, new { @class = "col-md-4 control-label" })
+                    <div class="col-md-8">
+                        <div class="input-group">
+                            <span class="input-group-addon">#</span>
+                            @Html.TextBoxFor(m => m.ReorderLevel, new
+                               {
+                                   @class = "form-control number",
+                                   type = "number",
+                                   autocomplete = "off", 
+                                   placeholder = "0"
+                               })
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Discontinued, new { @class = "col-md-4 control-label" })
+                    <div class="col-md-8">
+                        @Html.CheckBoxFor(m => m.Discontinued, new { @class = "form-control"})
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" class="btn btn-default" value="Update Product" />
+                        @Html.ActionLink("Cancel", "Products", "Admin", new { @class = "btn btn-default"})
+                     </div>
+                </div>
+            }
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="well">
+            At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis
+            praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias
+            excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui
+            officia deserunt mollitia animi.
+        </div>
+    </div>
+
+</div>
+       
+
+@section Scripts
+{
+    @Scripts.Render("~/bundles/maskedinput")
+
+    <style type="text/css">
+    </style>
+    <script type="text/javascript">
+        
+
+        jQuery(function ($) {
+            $(".number").on('keydown', numbersOnly);
+            $(".currenciesOnly").on('keydown', currenciesOnly);
+        });
+    </script>
+}
+

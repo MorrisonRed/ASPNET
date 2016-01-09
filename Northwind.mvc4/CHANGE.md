@@ -1,5 +1,16 @@
 ﻿# Northwind.mvc4 Changelog
 
+### Version 0.0.6
+<small><i>January 8, 2016</i></small>
+
+* **Add and Edit Product Pages**<br/>
+<ul>
+<li>Added Product List Page</li>
+<li>Added Product Edit Page</li>
+<li>Added Product Add Page</li>
+
+</ul>
+
 ### Version 0.0.5
 <small><i>January 6, 2016</i></small>
 
@@ -10,6 +21,7 @@
 <li>Added Category Add Page</li>
 
 </ul>
+
 ### Version 0.0.4
 <small><i>January 3, 2016</i></small>
 

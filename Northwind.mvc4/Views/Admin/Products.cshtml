@@ -1,0 +1,121 @@
+﻿@model IEnumerable<ASPNET.Models.ProductViewModel>
+@{
+    ViewBag.Title = "Products";
+}
+
+<div class="row">
+    <div class='col-sm-12'>
+        <ul class="breadcrumb">
+            <li><a href="/">Home</a></li>
+            <li><a href="/admin">Administration</a></li>
+            <li class="active">Products</li>
+        </ul>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="well">
+            @using (Html.BeginForm())
+            {
+                if (!String.IsNullOrEmpty(ViewBag.Message))
+                {
+                    <div class='alert alert-success' role='alert'>
+                        <span class='glyphicon glyphicon-ok' aria-hidden='true'></span>
+                        <span class='sr-only'>Success: </span>
+                        @ViewBag.Message
+                    </div>
+                }
+                if (!Html.ViewData.ModelState.IsValid)
+                {
+                    <div class='alert alert-danger' role='alert'>
+                        <span class='glyphicon glyphicon-exclamation-sign' aria-hidden='true'></span>
+                        <span class='sr-only'>Error:</span>
+                        @Html.ValidationSummary("")
+                    </div>
+                }
+
+                <div style="display:table;width:100%;margin-top:15px;">
+                    <div style="display:table-row;">
+                        <div style="display:table-cell;width:100%;">
+                            <input id="searchterm" name="searchterm" type="text" placeholder="search for product" class="form-control"
+                                   style="width:100%;max-width:none;" value='@Request["searchterm"]' />
+                        </div>
+                        <div style="display:table-cell;white-space:nowrap;font-size:1px;">
+                            <input type="submit" class="btn btn-default" style="margin-bottom:10px;" value="Search" />
+                            <a href="/Admin/ProductAdd" class="btn btn-default" style="margin-bottom:10px;">Add</a>
+                        </div>
+                    </div>
+                </div>
+            }
+            <table class="table demo table-bordered">
+                <thead>
+                    <tr>
+                        <th data-toggle="true">@Html.DisplayNameFor(model => model.ProductName)</th>
+                        <th data-hide="phone">@Html.DisplayNameFor(model => model.QuantityPerUnit)</th>
+                        <th data-hide="phone">@Html.DisplayNameFor(model => model.UnitPrice)</th>
+                        <th data-hide="phone,tablet">@Html.DisplayNameFor(model => model.UnitsInStock)</th>
+                        <th data-hide="phone,tablet">@Html.DisplayNameFor(model => model.UnitsOnOrder)</th>
+                        <th data-hide="phone,tablet">@Html.DisplayNameFor(model => model.Discontinued)</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        int i = 0;
+                        foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@Html.DisplayFor(modelItem => item.ProductName)</td>
+                                <td>@Html.DisplayFor(modelItem => item.QuantityPerUnit)</td>
+                                <td>@Html.DisplayFor(modelItem => item.UnitPrice)</td>
+                                <td>@Html.DisplayFor(modelItem => item.UnitsInStock)</td>
+                                <td>@Html.DisplayFor(modelItem => item.UnitsOnOrder)</td>
+                                <td>@Html.DisplayFor(modelItem => item.Discontinued)</td>
+
+                                <!-- Commands-->
+                                <td class="col-md-2">
+                                    <a href='/admin/productedit/@item.ProductID ' class='button special'>Edit</a>
+                                    <a href='/admin/productdelete/@item.ProductID' class='button special'>Delete</a>
+                                </td>
+
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    @Styles.Render("~/Scripts/footable-v2/css/footable.standalone.css")
+    @Scripts.Render("~/Scripts/footable-v2/js/footable.js")
+
+    <style type="text/css">
+    </style>
+    <script type="text/javascript">
+        jQuery(function ($) {
+            $('.table').footable();
+
+            $('.table').bind('footable_breakpoint', function () {
+                $('.table').trigger('footable_expand_first_row');
+            });
+        });
+    </script>
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

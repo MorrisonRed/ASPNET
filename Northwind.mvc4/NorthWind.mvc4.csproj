@@ -190,6 +190,7 @@
     <Compile Include="App\SqlHelper.cs" />
     <Compile Include="App\Suppliers\ISupplier.cs" />
     <Compile Include="App\Suppliers\Supplier.cs" />
+    <Compile Include="App\Suppliers\SupplierRepository.cs" />
     <Compile Include="App\Territory\ITerritory.cs" />
     <Compile Include="App\Territory\Territory.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
@@ -282,6 +283,9 @@
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\maskedinput2\jquery.maskedinput2.js" />
+    <Content Include="Scripts\maskedinput\jquery.maskedinput.js" />
+    <Content Include="Scripts\maskedinput\jquery.maskedinput.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\npm.js" />
     <Content Include="Scripts\respond.js" />
@@ -338,6 +342,10 @@
     <Content Include="Views\Admin\CategoryEdit.cshtml" />
     <Content Include="Views\Admin\CategoryAdd.cshtml" />
     <Content Include="Views\Admin\CategoryDelete.cshtml" />
+    <Content Include="Views\Admin\Products.cshtml" />
+    <Content Include="Views\Admin\ProductAdd.cshtml" />
+    <Content Include="Views\Admin\ProductEdit.cshtml" />
+    <Content Include="Views\Admin\ProductDelete.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

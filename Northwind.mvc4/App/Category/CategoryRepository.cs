@@ -82,7 +82,7 @@ namespace AppCore.Category
         #endregion
 
         #region Queries
-        internal TCategory FindById(int id)
+        public TCategory FindById(int id)
         {
             using (var conn = new SqlConnection(_connectionString))
             {

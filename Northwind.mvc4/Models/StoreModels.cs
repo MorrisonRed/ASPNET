@@ -31,5 +31,10 @@ namespace ASPNET.Models
         public int ReorderLevel { get; set; }
         [Display(Name = "Discontinued")]
         public bool Discontinued { get; set; }
+
+        public bool IsEmpty()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

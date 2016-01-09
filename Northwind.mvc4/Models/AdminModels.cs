@@ -10,10 +10,10 @@ using AppCore.Product;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 
-
 namespace ASPNET.Models
 {
 
+    #region User Models
     public class UserAddViewModel
     {
         public string SelectedRoleID { get; set; }
@@ -97,7 +97,9 @@ namespace ASPNET.Models
         [Display(Name = "Postal Code")]
         public virtual string PostalCode { get; set; }
     }
+    #endregion
 
+    #region Category Models
     public class CategoryAddViewModel
     {
         [Required]
@@ -134,4 +136,131 @@ namespace ASPNET.Models
         [Display(Name = "Picture")]
         public byte[] Picture { get; set; }
     }
+    #endregion
+
+    #region Product Models
+    public class ProductViewModel : IProduct 
+    {
+        [Display(Name = "Id")]
+        public int ProductID { get; set; }
+        [Display(Name = "Name")]
+        public string ProductName { get; set; }
+        [Display(Name = "Supplier Id")]
+        public int SupplierID { get; set; }
+        [Display(Name = "Category Id")]
+        public int CategoryID { get; set; }
+        [Display(Name = "Quanitity per Unit")]
+        public string QuantityPerUnit { get; set; }
+        [Display(Name = "Unit Price")]
+        public decimal UnitPrice { get; set; }
+        [Display(Name = "Units in Stock")]
+        public int UnitsInStock { get; set; }
+        [Display(Name = "Units on Order")]
+        public int UnitsOnOrder { get; set; }
+        [Display(Name = "Reorder Level")]
+        public int ReorderLevel { get; set; }
+        [Display(Name = "Discontinued")]
+        public bool Discontinued { get; set; }
+
+        public bool IsEmpty()
+        {
+            throw new NotImplementedException();
+        }
+    }
+    public class ProductAddViewModel
+    {
+        public int SelectedCategoryID { get; set; }
+        public System.Web.Mvc.SelectList Categories;
+        public int SelectedSupplierID { get; set; }
+        public System.Web.Mvc.SelectList Suppliers;
+
+        [Display(Name = "Id")]
+        public int ProductID { get; set; }
+        [Display(Name = "Name")]
+        public string ProductName { get; set; }
+        [Display(Name = "Supplier Id")]
+        public int SupplierID { get; set; }
+        [Display(Name = "Category Id")]
+        public int CategoryID { get; set; }
+        [Display(Name = "Quanitity per Unit")]
+        public string QuantityPerUnit { get; set; }
+        [Display(Name = "Unit Price")]
+        [DisplayFormat(DataFormatString = "{0:n2}", ApplyFormatInEditMode = true)]
+        public decimal UnitPrice { get; set; }
+        [Display(Name = "Units in Stock")]
+        [UIHint("NumberTemplate")]
+        public int UnitsInStock { get; set; }
+        [Display(Name = "Units on Order")]
+        [UIHint("NumberTemplate")]
+        public int UnitsOnOrder { get; set; }
+        [Display(Name = "Reorder Level")]
+        [UIHint("NumberTemplate")]
+        public int ReorderLevel { get; set; }
+        [Display(Name = "Discontinued")]
+        public bool Discontinued { get; set; }
+    }
+    public class ProductEditViewModel
+    {
+        public int SelectedCategoryID { get; set; }
+        public System.Web.Mvc.SelectList Categories;
+        public int SelectedSupplierID { get; set; }
+        public System.Web.Mvc.SelectList Suppliers;
+
+        [Display(Name = "Id")]
+        public int ProductID { get; set; }
+        [Display(Name = "Name")]
+        public string ProductName { get; set; }
+        [Display(Name = "Supplier Id")]
+        public int SupplierID { get; set; }
+        [Display(Name = "Category Id")]
+        public int CategoryID { get; set; }
+        [Display(Name = "Quanitity per Unit")]
+        public string QuantityPerUnit { get; set; }
+        [Display(Name = "Unit Price")]
+        [DisplayFormat(DataFormatString = "{0:n2}", ApplyFormatInEditMode = true)]
+        public decimal UnitPrice { get; set; }
+        [Display(Name = "Units in Stock")]
+        [UIHint("NumberTemplate")]
+        public int UnitsInStock { get; set; }
+        [Display(Name = "Units on Order")]
+        [UIHint("NumberTemplate")]
+        public int UnitsOnOrder { get; set; }
+        [Display(Name = "Reorder Level")]
+        [UIHint("NumberTemplate")]
+        public int ReorderLevel { get; set; }
+        [Display(Name = "Discontinued")]
+        public bool Discontinued { get; set; }
+    }
+    public class ProductDeleteViewModel
+    {
+        [Display(Name = "Id")]
+        public int ProductID { get; set; }
+        [Display(Name = "Name")]
+        public string ProductName { get; set; }
+        [Display(Name = "Supplier Id")]
+        public int SupplierID { get; set; }
+        [Display(Name = "Supplier")]
+        public string Supplier { get; set; }
+        [Display(Name = "Category Id")]
+        public int CategoryID { get; set; }
+        [Display(Name = "Category")]
+        public string Category { get; set; }
+        [Display(Name = "Quanitity per Unit")]
+        public string QuantityPerUnit { get; set; }
+        [Display(Name = "Unit Price")]
+        [DisplayFormat(DataFormatString = "{0:n2}", ApplyFormatInEditMode = true)]
+        public decimal UnitPrice { get; set; }
+        [Display(Name = "Units in Stock")]
+        [UIHint("NumberTemplate")]
+        public int UnitsInStock { get; set; }
+        [Display(Name = "Units on Order")]
+        [UIHint("NumberTemplate")]
+        public int UnitsOnOrder { get; set; }
+        [Display(Name = "Reorder Level")]
+        [UIHint("NumberTemplate")]
+        public int ReorderLevel { get; set; }
+        [Display(Name = "Discontinued")]
+        public bool Discontinued { get; set; }
+    }
+    #endregion
 }

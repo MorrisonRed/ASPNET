@@ -28,6 +28,11 @@ namespace ASPNET
                       "~/Content/bootstrap.css",
                       "~/Content/bootstrap-datepicker.css",  // ** NEW for Bootstrap Datepicker
                       "~/Content/bootstrap.northwind.css"));
+
+            bundles.Add(new ScriptBundle("~/bundles/maskedinput").Include(
+                    "~/Scripts/maskedinput/jquery.maskedinput.min.js", 
+                    "~/Scripts/maskedinput2/jquery.maskedinput2.js"
+                ));
         }
     }
 }

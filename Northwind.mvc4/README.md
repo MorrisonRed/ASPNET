@@ -15,6 +15,7 @@
     <li>
       Images provided by <a href="http://unsplash.com/" target="_blank">Unsplash</a>
     </li>
+    <li>Masked Input plugin for jQuery</li>
   </ul>
 </p>
 
