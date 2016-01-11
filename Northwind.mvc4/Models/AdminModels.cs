@@ -352,4 +352,32 @@ namespace ASPNET.Models
         public string HomePage { get; set; }
     }
     #endregion
+
+    #region Shipper Models
+    public class ShipperAddViewModel
+    {
+        [Display(Name = "Name"), Required]
+        public string CompanyName { get; set; }
+        [Display(Name = "Phone")]
+        public string Phone { get; set; }
+    }
+    public class ShipperEditViewModel
+    {
+        [Display(Name = "Id"), Key, Required]
+        public int ShipperID { get; set; }
+        [Display(Name = "Name"), Required]
+        public string CompanyName { get; set; }
+        [Display(Name = "Phone")]
+        public string Phone { get; set; }
+    }
+    public class ShipperDeleteViewModel
+    {
+        [Display(Name = "Id"), Key, Required]
+        public int ShipperID { get; set; }
+        [Display(Name = "Name"), Required]
+        public string CompanyName { get; set; }
+        [Display(Name = "Phone")]
+        public string Phone { get; set; }
+    }
+    #endregion 
 }

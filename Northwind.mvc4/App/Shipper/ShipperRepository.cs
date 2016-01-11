@@ -23,39 +23,115 @@ namespace AppCore.Shipper
         #endregion
 
         #region CRUD Methods
+        public bool Add(TShipper shipper)
+        {
+            using (var conn = new SqlConnection(_connectionString))
+            {
+                var parameters = new Dictionary<string, object>();
+                //auto load all paramters for each public property of object
+                Type type = typeof(Shipper);
+                var properties = type.GetProperties();
+                foreach (PropertyInfo info in properties)
+                {
+                    var attribute = Attribute.GetCustomAttribute(info, typeof(KeyAttribute)) as KeyAttribute;
+                    //do not add [Key] property to insert statement as it is the Primary Key
+                    if (attribute == null)
+                    {
+                        var value = (info.GetValue(shipper, null) == null) ? DBNull.Value : info.GetValue(shipper, null);
+                        parameters.Add("@" + info.Name, value);
+                    }
+                }
 
+                var result = SqlHelper.ExecuteNonQuery(conn,
+                            @"INSERT INTO Shippers(CompanyName, Phone) VALUES (@CompanyName, @Phone)",
+                            parameters);
+
+                return true;
+            }
+        }
+        public bool Update(TShipper shipper)
+        {
+            using (var conn = new SqlConnection(_connectionString))
+            {
+                var parameters = new Dictionary<string, object>();
+                //auto load all paramters for each public property of object
+                Type type = typeof(Shipper);
+                var properties = type.GetProperties();
+                foreach (PropertyInfo info in properties)
+                {
+                    var value = (info.GetValue(shipper, null) == null) ? DBNull.Value : info.GetValue(shipper, null);
+                    parameters.Add("@" + info.Name, value);
+                }
+
+                var result = SqlHelper.ExecuteNonQuery(conn,
+                            @"UPDATE Shippers SET CompanyName=@CompanyName, Phone=@Phone WHERE ShipperID=@ShipperID",
+                            parameters);
+
+                return true;
+            }
+        }
+        public bool Delete(TShipper shipper)
+        {
+            using (var conn = new SqlConnection(_connectionString))
+            {
+                var parameters = new Dictionary<string, object>()
+                {
+                    { "@ID", shipper.ShipperID }
+                };
+
+                var result = SqlHelper.ExecuteNonQuery(conn,
+                            @"DELETE FROM Shippers WHERE ShipperID = @ID",
+                            parameters);
+
+                return true;
+            }
+        }
         #endregion
 
         #region Queries
-        public IQueryable<TSupplier> GetSuppliers()
+        public TShipper FindById(int id)
         {
-            var suppliers = new List<TSupplier>();
+            using (var conn = new SqlConnection(_connectionString))
+            {
+                var parameters = new Dictionary<string, object>
+                {
+                    {"@ID", id }
+                };
+
+                var reader = SqlHelper.ExecuteReader(conn, CommandType.Text,
+                    @"SELECT ShipperID, CompanyName, Phone FROM Shippers 
+                        WHERE ShipperID=@ID",
+                    parameters);
+
+                var shipper = (TShipper)Activator.CreateInstance(typeof(TShipper));
+                while (reader.Read())
+                {
+                    shipper.ShipperID = (int)reader["ShipperID"];
+                    shipper.CompanyName = reader["CompanyName"].ToString();
+                    shipper.Phone = reader["Phone"].ToString();
+                }
+                return shipper;
+            }
+        }
+        public IQueryable<TShipper> GetShippers()
+        {
+            var shippers = new List<TShipper>();
             using (var conn = new SqlConnection(_connectionString))
             {
                 var reader = SqlHelper.ExecuteReader(conn, CommandType.Text,
-                    @"SELECT SupplierId, CompanyName, ContactName, ContactTitle, Address, City, 
-                        Region, PostalCode, Country, Phone, Fax, HomePage FROM Suppliers"
+                    @"SELECT ShipperID, CompanyName, Phone FROM Shippers"
                     , null);
 
                 while (reader.Read())
                 {
-                    var supplier = (TSupplier)Activator.CreateInstance(typeof(TSupplier));
-                    supplier.SupplierId = (int)reader["SupplierID"];
-                    supplier.CompanyName = reader["CompanyName"].ToString();
-                    supplier.ContactName = reader["ContactName"].ToString();
-                    supplier.ContactTitle = reader["ContactTitle"].ToString();
-                    supplier.Address = reader["Address"].ToString();
-                    supplier.City = reader["City"].ToString();
-                    supplier.Region = reader["Region"].ToString();
-                    supplier.PostalCode = reader["PostalCode"].ToString();
-                    supplier.Country = reader["Country"].ToString();
-                    supplier.Phone = reader["Phone"].ToString();
-                    supplier.Fax = reader["Fax"].ToString();
-                    supplier.HomePage = reader["HomePage"].ToString();
-                    suppliers.Add(supplier);
+                    var shipper = (TShipper)Activator.CreateInstance(typeof(TShipper));
+                    shipper.ShipperID = (int)reader["ShipperID"];
+                    shipper.CompanyName = reader["CompanyName"].ToString();
+                    shipper.Phone = reader["Phone"].ToString();       
+                    shippers.Add(shipper);
                 }
             }
-            return suppliers.AsQueryable();
+            return shippers.AsQueryable();
         }
         #endregion
     }

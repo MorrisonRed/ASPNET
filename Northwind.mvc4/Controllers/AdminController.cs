@@ -858,6 +858,7 @@ namespace ASPNET.Models
 
             return View(suppliers);
         }
+
         public ActionResult SupplierAdd(SupplierAddViewModel model)
         {
             ViewBag.PageTitle = "Add Supplier";
@@ -869,8 +870,7 @@ namespace ASPNET.Models
 
             return View(model);
         }
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+        [HttpPost, ValidateAntiForgeryToken]
         public async Task<ActionResult> SupplierAdd(SupplierAddViewModel model, FormCollection form)
         {
             if (ModelState.IsValid)
@@ -946,8 +946,7 @@ namespace ASPNET.Models
 
             return View(model);
         }
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+        [HttpPost, ValidateAntiForgeryToken]
         public async Task<ActionResult> SupplierEdit(SupplierEditViewModel model, FormCollection form)
         {
             var countryRepository = new AppCore.Country.CountryRepository<AppCore.Country.Country>(ConfigurationManager.ConnectionStrings["DefaultConnection"].ToString());
@@ -1018,8 +1017,7 @@ namespace ASPNET.Models
             return View(model);
 
         }
-        [HttpPost, ActionName("SupplierDelete")]
-        [ValidateAntiForgeryToken]
+        [HttpPost, ActionName("SupplierDelete"), ValidateAntiForgeryToken]
         public async Task<ActionResult> SupplierDeleteConfirmed(int id)
         {
             var supplierRepository = new AppCore.Suppliers.SupplierRepository<AppCore.Suppliers.Supplier>(ConfigurationManager.ConnectionStrings["DefaultConnection"].ToString());
@@ -1031,13 +1029,164 @@ namespace ASPNET.Models
 
                 if (result)
                 {
-                    ViewBag.Message = "product deleted!";
+                    ViewBag.Message = "supplier deleted!";
                     var model = new SupplierDeleteViewModel();
                     //ModelState.Clear();
                     return View(model);
                 }
 
                 return RedirectToAction("Suppliers", "Admin");
+            }
+
+            // Not Found
+            return HttpNotFound();
+        }
+        #endregion
+
+        #region Shippers
+        public ActionResult Shippers(string searchterm)
+        {
+            ViewBag.PageTitle = "Shippers";
+            ViewBag.Message = "";
+
+            IQueryable<AppCore.Shipper.Shipper> shippers;
+            var shipperRepository = new AppCore.Shipper.ShipperRepository<AppCore.Shipper.Shipper>(ConfigurationManager.ConnectionStrings["DefaultConnection"].ToString());     
+
+            if (!String.IsNullOrEmpty(searchterm))
+            {
+                shippers = shipperRepository.GetShippers().Where(s => s.CompanyName.ToLower().Contains(searchterm.ToLower())).OrderBy(s => s.CompanyName);
+            }
+            else
+            {
+                shippers = shipperRepository.GetShippers().OrderBy(s => s.CompanyName);
+            }
+            return View(shippers);
+        }
+
+        public ActionResult ShipperAdd(ShipperAddViewModel model)
+        {
+            ViewBag.PageTitle = "Add Shipper";
+            ViewBag.Message = "";
+
+            return View();
+        }
+        [HttpPost, ValidateAntiForgeryToken]
+        public async Task<ActionResult> ShipperAdd(ShipperAddViewModel model, FormCollection form)
+        {
+            if (ModelState.IsValid)
+            {
+                var shipperRepository = new AppCore.Shipper.ShipperRepository<AppCore.Shipper.Shipper>(ConfigurationManager.ConnectionStrings["DefaultConnection"].ToString());
+                AppCore.Shipper.Shipper shipper = new AppCore.Shipper.Shipper()
+                {
+                    CompanyName = model.CompanyName,
+                    Phone = model.Phone
+                };
+
+                var result = shipperRepository.Add(shipper);
+                if (result)
+                {
+                    ViewBag.Message = "shipper added";
+                    model = new ShipperAddViewModel();
+                    ModelState.Clear();
+                    return View(model);
+                }
+                else
+                {
+                    ModelState.AddModelError("", new Exception("failed to add shipper"));
+                }
+            }
+
+            //not valid
+            return View(model);
+        }
+
+        public ActionResult ShipperEdit(int id)
+        {
+            ViewBag.PageTile = "Edit Shipper";
+            ViewBag.Message = "";
+
+            var shipperRepository = new AppCore.Shipper.ShipperRepository<AppCore.Shipper.Shipper>(ConfigurationManager.ConnectionStrings["DefaultConnection"].ToString());
+            var shipper = shipperRepository.FindById(id);
+
+            if (shipper.IsEmpty())
+            {
+                return RedirectToAction("Error", "Home");
+            }
+
+            ShipperEditViewModel model = new ShipperEditViewModel()
+            {
+                ShipperID = shipper.ShipperID, 
+                CompanyName = shipper.CompanyName, 
+                Phone = shipper.Phone
+            };
+
+            return View(model);
+        }
+        [HttpPost, ValidateAntiForgeryToken]
+        public async Task<ActionResult> ShipperEdit(ShipperEditViewModel model, FormCollection form)
+        {
+            if (ModelState.IsValid)
+            {
+                var shipperRepository = new AppCore.Shipper.ShipperRepository<AppCore.Shipper.Shipper>(ConfigurationManager.ConnectionStrings["DefaultConnection"].ToString());
+                var shipper = shipperRepository.FindById(model.ShipperID);
+
+                shipper.CompanyName = model.CompanyName;
+                shipper.Phone = model.Phone;
+
+                var result = shipperRepository.Update(shipper);
+                if (result)
+                {
+                    ViewBag.Message = "shipper updated!";
+                    return View(model);
+                }
+                ModelState.AddModelError("", new Exception("failed to update shipper"));
+            }
+
+            //not valid
+            return View(model);
+        }
+
+        public ActionResult ShipperDelete(int id = 0)
+        {
+            ViewBag.PageTile = "Delete Shipper";
+            ViewBag.Message = "";
+
+            var shipperRepository = new AppCore.Shipper.ShipperRepository<AppCore.Shipper.Shipper>(ConfigurationManager.ConnectionStrings["DefaultConnection"].ToString());
+            var shipper = shipperRepository.FindById(id);
+
+            if (shipper.IsEmpty())
+            {
+                return HttpNotFound();
+            }
+
+            ShipperDeleteViewModel model = new ShipperDeleteViewModel()
+            {
+                ShipperID = shipper.ShipperID,
+                CompanyName = shipper.CompanyName,
+                Phone = shipper.Phone
+            };
+
+            return View(model);
+        }
+        [HttpPost, ActionName("ShipperDelete"), ValidateAntiForgeryToken]
+        public async Task<ActionResult> ShipperDeleteConfirm(int id)
+        {
+            var shipperRepository = new AppCore.Shipper.ShipperRepository<AppCore.Shipper.Shipper>(ConfigurationManager.ConnectionStrings["DefaultConnection"].ToString());
+            var shipper = shipperRepository.FindById(id);
+
+            if (!shipper.IsEmpty())
+            {
+                var result = shipperRepository.Delete(shipper);
+
+                if (result)
+                {
+                    ViewBag.Message = "shipper deleted!";
+                    var model = new ShipperDeleteViewModel();
+                    //ModelState.Clear();
+                    return View(model);
+                }
+
+                return RedirectToAction("Shippers", "Admin");
             }
 
             // Not Found

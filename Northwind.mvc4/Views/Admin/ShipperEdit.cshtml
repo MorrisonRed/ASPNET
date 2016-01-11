@@ -1,0 +1,99 @@
+﻿@model ASPNET.Models.ShipperEditViewModel
+@{
+    ViewBag.Title = "Edit Shipper";
+}
+
+
+<div class="row">
+    <div class='col-sm-12'>
+        <ul class="breadcrumb">
+            <li><a href="/">Home</a></li>
+            <li><a href="/admin">Administration</a></li>
+            <li><a href="/admin/shippers">Shippers</a></li>
+            <li class="active">Edit Shipper</li>
+        </ul>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="well">
+            <!-- Blank Forms Post Back to themselves-->
+            @using (Html.BeginForm("ShipperEdit", "Admin", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+            {
+                @Html.AntiForgeryToken()
+
+                if (!String.IsNullOrEmpty(ViewBag.Message))
+                {
+                    <div class='alert alert-success' role='alert'>
+                        <span class='glyphicon glyphicon-ok' aria-hidden='true'></span>
+                        <span class='sr-only'>Success: </span>
+                        @ViewBag.Message
+                    </div>
+                }
+
+                if (IsPost)
+                {
+                    if (!Html.ViewData.ModelState.IsValid)
+                    {
+                        <div class='alert alert-danger' role='alert'>
+                            <span class='glyphicon glyphicon-exclamation-sign' aria-hidden='true'></span>
+                            <span class='sr-only'>Error:</span>
+                            @Html.ValidationSummary("")
+                        </div>
+                    }
+                }
+
+                @Html.HiddenFor(m => m.ShipperID)
+                <div class="form-group">
+                    @Html.LabelFor(m => m.CompanyName, new { @class = "col-md-4 control-label" })
+                    <div class="col-md-8">
+                        @Html.TextBoxFor(m => m.CompanyName, new { @class = "form-control", autocomplete = "off", placeholder = "ABC Company" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Phone, new { @class = "col-md-4 control-label" })
+                    <div class="col-md-8">
+                        @Html.TextBoxFor(m => m.Phone, new { @class = "form-control", placeholder = "(999)999-9999" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" class="btn btn-default" value="Update Shipper" />
+                        @Html.ActionLink("Cancel", "Shippers", "Admin", new { @class = "btn btn-default" })
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="well">
+            At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis
+            praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias
+            excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui
+            officia deserunt mollitia animi.
+        </div>
+    </div>
+
+</div>
+
+
+@section Scripts
+{
+    @Scripts.Render("~/bundles/maskedinput")
+
+    <style type="text/css">
+    </style>
+    <script type="text/javascript">
+
+
+        jQuery(function ($) {
+            $(".number").on('keydown', numbersOnly);
+            $(".currenciesOnly").on('keydown', currenciesOnly);
+        });
+    </script>
+}
+

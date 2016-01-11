@@ -1,5 +1,17 @@
 ﻿# Northwind.mvc4 Changelog
 
+### Version 0.0.7
+<small><i>January 11, 2016</i></small>
+
+* **Add and Edit Shipper Pages**<br/>
+<ul>
+<li>Added Shipper List Page</li>
+<li>Added Shipper Edit Page</li>
+<li>Added Shipper Add Page</li>
+
+
+</ul>
+
 ### Version 0.0.6
 <small><i>January 10, 2016</i></small>
 
