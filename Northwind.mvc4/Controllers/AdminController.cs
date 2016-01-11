@@ -839,6 +839,212 @@ namespace ASPNET.Models
         }
         #endregion
 
+        #region Suppliers
+        public ActionResult Suppliers(string searchterm)
+        {
+            ViewBag.PageTitle = "Suppliers";
+            ViewBag.Message = "";
+
+            IQueryable<AppCore.Suppliers.Supplier> suppliers;
+            var supplierRepository = new AppCore.Suppliers.SupplierRepository<AppCore.Suppliers.Supplier>(ConfigurationManager.ConnectionStrings["DefaultConnection"].ToString());
+            if (!String.IsNullOrEmpty(searchterm))
+            {
+                suppliers = supplierRepository.GetSuppliers().Where(s => s.CompanyName.ToLower().Contains(searchterm)).OrderBy(s => s.CompanyName);
+            }
+            else
+            {
+                suppliers = supplierRepository.GetSuppliers().OrderBy(s => s.CompanyName);
+            }
+
+            return View(suppliers);
+        }
+        public ActionResult SupplierAdd(SupplierAddViewModel model)
+        {
+            ViewBag.PageTitle = "Add Supplier";
+            ViewBag.Message = "";
+
+            //load dropdownlists
+            var countryRepository = new AppCore.Country.CountryRepository<AppCore.Country.Country>(ConfigurationManager.ConnectionStrings["DefaultConnection"].ToString());
+            model.Countries = new SelectList(countryRepository.GetCountries().OrderBy(c => c.Name), "Code", "Name", "CAN");
+
+            return View(model);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> SupplierAdd(SupplierAddViewModel model, FormCollection form)
+        {
+            if (ModelState.IsValid)
+            {
+                var supplierRepository = new AppCore.Suppliers.SupplierRepository<AppCore.Suppliers.Supplier>(ConfigurationManager.ConnectionStrings["DefaultConnection"].ToString());
+                var supplier = new AppCore.Suppliers.Supplier()
+                {
+                    CompanyName = model.CompanyName,
+                    ContactName = model.ContactName,
+                    ContactTitle = model.ContactTitle,
+                    Address = model.Address, 
+                    City = model.City, 
+                    Region = model.Region, 
+                    PostalCode = model.PostalCode, 
+                    Country = model.Country, 
+                    Phone = model.Phone, 
+                    Fax = model.Fax, 
+                    HomePage = model.HomePage
+                };
+
+                var result = supplierRepository.Add(supplier); 
+                if (result)
+                {
+                    ViewBag.Message = "supplier added"; 
+                    model = new SupplierAddViewModel();
+                    ModelState.Clear();
+                    return View(model);
+                }
+                else
+                {
+                    ModelState.AddModelError("", new Exception("failed to add supplier"));
+                    //AddErrors(result);
+                }
+            }
+
+            //not valid
+            return View(model);
+        }
+
+        public ActionResult SupplierEdit(int id)
+        {
+            ViewBag.PageTitle = "Edit Supplier";
+            ViewBag.Message = "";
+
+            var supplierRepository = new AppCore.Suppliers.SupplierRepository<AppCore.Suppliers.Supplier>(ConfigurationManager.ConnectionStrings["DefaultConnection"].ToString());
+            var supplier = supplierRepository.FindById(id);
+
+            if (supplier.IsEmpty())
+            {
+                return RedirectToAction("Error", "Home");
+            }
+
+            SupplierEditViewModel model = new SupplierEditViewModel()
+            {
+                SupplierId = supplier.SupplierId,
+                CompanyName = supplier.CompanyName,
+                ContactName = supplier.ContactName,
+                ContactTitle = supplier.ContactTitle,
+                Address = supplier.Address,
+                City = supplier.City,
+                Region = supplier.Region,
+                PostalCode = supplier.PostalCode,
+                Country = supplier.Country,
+                Phone = supplier.Phone,
+                Fax = supplier.Fax,
+                HomePage = supplier.HomePage
+            };
+
+            var countryRepository = new AppCore.Country.CountryRepository<AppCore.Country.Country>(ConfigurationManager.ConnectionStrings["DefaultConnection"].ToString());
+            model.Countries = new SelectList(countryRepository.GetCountries().OrderBy(c => c.Name), "Code", "Name");
+            model.SelectedCountryID = model.Country;
+            
+
+            return View(model);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> SupplierEdit(SupplierEditViewModel model, FormCollection form)
+        {
+            var countryRepository = new AppCore.Country.CountryRepository<AppCore.Country.Country>(ConfigurationManager.ConnectionStrings["DefaultConnection"].ToString());
+            var supplierRepository = new AppCore.Suppliers.SupplierRepository<AppCore.Suppliers.Supplier>(ConfigurationManager.ConnectionStrings["DefaultConnection"].ToString());
+
+            if (ModelState.IsValid)
+            {
+                var supplier = supplierRepository.FindById(model.SupplierId);
+                supplier.CompanyName = model.CompanyName;
+                supplier.ContactName = model.ContactName;
+                supplier.ContactTitle = model.ContactTitle;
+                supplier.Address = model.Address;
+                supplier.City = model.City;
+                supplier.Region = model.Region;
+                supplier.PostalCode = model.PostalCode;
+                supplier.Country = model.SelectedCountryID;
+                supplier.Phone = model.Phone;
+                supplier.Fax = model.Fax;
+                supplier.HomePage = model.HomePage;
+
+                //update supplier
+                var result = supplierRepository.Update(supplier);
+                if (result)
+                {
+                    ViewBag.Message = "supplier updated!";
+                    model.Countries = new SelectList(countryRepository.GetCountries().OrderBy(c => c.Name), "Code", "Name");
+                    model.SelectedCountryID = supplier.Country;
+                    return View(model);
+                }
+                ModelState.AddModelError("", new Exception("failed to update supplier"));
+                //AddErrors(result);
+            }
+
+            //only runs is model state is invalid
+            model.Countries = new SelectList(countryRepository.GetCountries().OrderBy(c => c.Name), "Code", "Name");
+            return View(model);
+        }
+
+        public ActionResult SupplierDelete(int id = 0)
+        {
+            ViewBag.PageTitle = "Delete Supplier";
+            ViewBag.Message = "";
+
+            var supplierRepository = new AppCore.Suppliers.SupplierRepository<AppCore.Suppliers.Supplier>(ConfigurationManager.ConnectionStrings["DefaultConnection"].ToString());
+            var supplier = supplierRepository.FindById(id);
+
+            if (supplier.IsEmpty())
+            {
+                return RedirectToAction("Error", "Home");
+            }
+
+            SupplierDeleteViewModel model = new SupplierDeleteViewModel()
+            {
+                SupplierId = supplier.SupplierId,
+                CompanyName = supplier.CompanyName,
+                ContactName = supplier.ContactName,
+                ContactTitle = supplier.ContactTitle,
+                Address = supplier.Address,
+                City = supplier.City,
+                Region = supplier.Region,
+                PostalCode = supplier.PostalCode,
+                Country = supplier.Country,
+                Phone = supplier.Phone,
+                Fax = supplier.Fax,
+                HomePage = supplier.HomePage
+            };
+
+            return View(model);
+
+        }
+        [HttpPost, ActionName("SupplierDelete")]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> SupplierDeleteConfirmed(int id)
+        {
+            var supplierRepository = new AppCore.Suppliers.SupplierRepository<AppCore.Suppliers.Supplier>(ConfigurationManager.ConnectionStrings["DefaultConnection"].ToString());
+            var supplier = supplierRepository.FindById(id);
+
+            if (!supplier.IsEmpty())
+            { 
+                var result = supplierRepository.Delete(supplier);
+
+                if (result)
+                {
+                    ViewBag.Message = "product deleted!";
+                    var model = new SupplierDeleteViewModel();
+                    //ModelState.Clear();
+                    return View(model);
+                }
+
+                return RedirectToAction("Suppliers", "Admin");
+            }
+
+            // Not Found
+            return HttpNotFound();
+        }
+        #endregion
+
         #region Helpers
         // Used for XSRF protection when adding external logins
         private const string XsrfKey = "XsrfId";
@@ -893,7 +1099,7 @@ namespace ASPNET.Models
         private static SelectList SelectListForCountries(string defaultValue = null)
         {
             var countryRepository = new AppCore.Country.CountryRepository<AppCore.Country.Country>(ConfigurationManager.ConnectionStrings["DefaultConnection"].ToString());
-            var countries = countryRepository.GetCountries();
+            var countries = countryRepository.GetCountries().OrderBy(c => c.Name);
             SelectList lst;
             if (defaultValue != null)
                 lst = new SelectList(countries, "Code", "Name", defaultValue);

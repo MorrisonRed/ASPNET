@@ -1,6 +1,17 @@
 ﻿# Northwind.mvc4 Changelog
 
 ### Version 0.0.6
+<small><i>January 10, 2016</i></small>
+
+* **Add and Edit Supplier Pages**<br/>
+<ul>
+<li>Added Supplier List Page</li>
+<li>Added Supplier Edit Page</li>
+<li>Added Supplier Add Page</li>
+
+</ul>
+
+### Version 0.0.6
 <small><i>January 8, 2016</i></small>
 
 * **Add and Edit Product Pages**<br/>
