@@ -1,6 +1,17 @@
 ﻿# Northwind.mvc4 Changelog
 
 ### Version 0.0.7
+<small><i>January 12, 2016</i></small>
+
+* **Add and Edit Customer Pages**<br/>
+<ul>
+<li>Added Customer List Page</li>
+<li>Added Customer Edit Page</li>
+<li>Added Customer Add Page</li>
+<li><a href="http://www.albahari.com/nutshell/predicatebuilder.aspx" target="_blank">Predicate Builder</a></li>
+</ul>
+
+### Version 0.0.7
 <small><i>January 11, 2016</i></small>
 
 * **Add and Edit Shipper Pages**<br/>
@@ -8,8 +19,6 @@
 <li>Added Shipper List Page</li>
 <li>Added Shipper Edit Page</li>
 <li>Added Shipper Add Page</li>
-
-
 </ul>
 
 ### Version 0.0.6
@@ -20,7 +29,6 @@
 <li>Added Supplier List Page</li>
 <li>Added Supplier Edit Page</li>
 <li>Added Supplier Add Page</li>
-
 </ul>
 
 ### Version 0.0.6
@@ -31,7 +39,6 @@
 <li>Added Product List Page</li>
 <li>Added Product Edit Page</li>
 <li>Added Product Add Page</li>
-
 </ul>
 
 ### Version 0.0.5
@@ -42,7 +49,6 @@
 <li>Added Category List Page</li>
 <li>Added Category Edit Page</li>
 <li>Added Category Add Page</li>
-
 </ul>
 
 ### Version 0.0.4

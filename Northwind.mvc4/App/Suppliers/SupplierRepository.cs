@@ -22,13 +22,13 @@ namespace AppCore.Suppliers
         #endregion
 
         #region CRUD Methods
-        public bool Add(Supplier supplier)
+        public bool Add(TSupplier supplier)
         {
             using (var conn = new SqlConnection(_connectionString))
             {
                 var parameters = new Dictionary<string, object>();
                 //auto load all paramters for each public property of object
-                Type type = typeof(Supplier);
+                Type type = typeof(TSupplier);
                 var properties = type.GetProperties();
                 foreach (PropertyInfo info in properties)
                 {
@@ -49,13 +49,13 @@ namespace AppCore.Suppliers
                 return true;
             }
         }
-        public bool Update(Supplier supplier)
+        public bool Update(TSupplier supplier)
         {
             using (var conn = new SqlConnection(_connectionString))
             {
                 var parameters = new Dictionary<string, object>();
                 //auto load all paramters for each public property of object
-                Type type = typeof(Supplier);
+                Type type = typeof(TSupplier);
                 var properties = type.GetProperties();
                 foreach (PropertyInfo info in properties)
                 {
@@ -102,7 +102,7 @@ namespace AppCore.Suppliers
 
                 var reader = SqlHelper.ExecuteReader(conn, CommandType.Text,
                     @"SELECT SupplierId, CompanyName, ContactName, ContactTitle, Address, City, 
-                        Region, PostalCode, Country, Phone, Fax FROM Suppliers 
+                        Region, PostalCode, Country, Phone, Fax, HomePage FROM Suppliers 
                         WHERE SupplierID=@ID",
                     parameters);
 

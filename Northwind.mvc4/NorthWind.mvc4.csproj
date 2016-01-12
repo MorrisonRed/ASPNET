@@ -175,11 +175,14 @@
     <Compile Include="App\Customer\Customer.cs" />
     <Compile Include="App\Customer\ICustomer.cs" />
     <Compile Include="App\Country\CountryRepository.cs" />
+    <Compile Include="App\Customer\CustomerRepository.cs" />
+    <Compile Include="App\Employee\EmployeeRepository.cs" />
     <Compile Include="App\Employee\Employee.cs" />
     <Compile Include="App\Employee\IEmployee.cs" />
     <Compile Include="App\Lanaguage\ILanguage.cs" />
     <Compile Include="App\Lanaguage\LanaguageRepository.cs" />
     <Compile Include="App\Lanaguage\Language.cs" />
+    <Compile Include="App\PredicateBuilder.cs" />
     <Compile Include="App\Product\IProduct.cs" />
     <Compile Include="App\Product\Product.cs" />
     <Compile Include="App\Product\ProductRepository.cs" />
@@ -355,6 +358,11 @@
     <Content Include="Views\Admin\ShipperAdd.cshtml" />
     <Content Include="Views\Admin\ShipperEdit.cshtml" />
     <Content Include="Views\Admin\ShipperDelete.cshtml" />
+    <Content Include="Views\Admin\Customers.cshtml" />
+    <Content Include="Views\Admin\CustomerAdd.cshtml" />
+    <Content Include="Views\Admin\CustomerEdit.cshtml" />
+    <Content Include="Views\Admin\CustomerDelete.cshtml" />
+    <Content Include="Views\Admin\Employees.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

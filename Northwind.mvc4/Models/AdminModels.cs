@@ -379,5 +379,89 @@ namespace ASPNET.Models
         [Display(Name = "Phone")]
         public string Phone { get; set; }
     }
-    #endregion 
+    #endregion
+
+    #region Customer Models
+    public class CustomerAddViewModel
+    {
+        public string SelectedCountryID { get; set; }
+        public System.Web.Mvc.SelectList Countries;
+
+        [Display(Name = "Customer Id"), Key, Required]
+        public string CustomerID { get; set; }
+        [Display(Name = "Name"), Required]
+        public string CompanyName { get; set; }
+        [Display(Name = "Contact")]
+        public string ContactName { get; set; }
+        [Display(Name = "Title")]
+        public string ContactTitle { get; set; }
+        [Display(Name = "Address")]
+        public string Address { get; set; }
+        [Display(Name = "City")]
+        public string City { get; set; }
+        [Display(Name = "Region")]
+        public string Region { get; set; }
+        [Display(Name = "Postal Code")]
+        public string PostalCode { get; set; }
+        [Display(Name = "Country")]
+        public string Country { get; set; }
+        [Display(Name = "Phone")]
+        public string Phone { get; set; }
+        [Display(Name = "Fax")]
+        public string Fax { get; set; }
+    }
+    public class CustomerEditViewModel
+    {
+        public string SelectedCountryID { get; set;}
+        public System.Web.Mvc.SelectList Countries;
+
+        [Display(Name = "Customer Id"), Key, Required]
+        public string CustomerID { get; set; }
+        [Display(Name = "Name"), Required]
+        public string CompanyName { get; set; }
+        [Display(Name = "Contact")]
+        public string ContactName { get; set; }
+        [Display(Name = "Title")]
+        public string ContactTitle { get; set; }
+        [Display(Name = "Address")]
+        public string Address { get; set; }
+        [Display(Name = "City")]
+        public string City { get; set; }
+        [Display(Name = "Region")]
+        public string Region { get; set; }
+        [Display(Name = "Postal Code")]
+        public string PostalCode { get; set; }
+        [Display(Name = "Country")]
+        public string Country { get; set; }
+        [Display(Name = "Phone")]
+        public string Phone { get; set; }
+        [Display(Name = "Fax")]
+        public string Fax { get; set; }
+    }
+    public class CustomerDeleteViewModel
+    {
+        [Display(Name = "Customer Id"), Key, Required]
+        public string CustomerID { get; set; }
+        [Display(Name = "Name")]
+        public string CompanyName { get; set; }
+        [Display(Name = "Contact")]
+        public string ContactName { get; set; }
+        [Display(Name = "Title")]
+        public string ContactTitle { get; set; }
+        [Display(Name = "Address")]
+        public string Address { get; set; }
+        [Display(Name = "City")]
+        public string City { get; set; }
+        [Display(Name = "Region")]
+        public string Region { get; set; }
+        [Display(Name = "Postal Code")]
+        public string PostalCode { get; set; }
+        [Display(Name = "Country")]
+        public string Country { get; set; }
+        [Display(Name = "Phone")]
+        public string Phone { get; set; }
+        [Display(Name = "Fax")]
+        public string Fax { get; set; }
+    }
+    #endregion
 }

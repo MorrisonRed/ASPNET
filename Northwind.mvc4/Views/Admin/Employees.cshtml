@@ -1,0 +1,150 @@
+﻿@model IEnumerable<AppCore.Employee.Employee>
+@{
+    ViewBag.Title = "Emplyees";
+}
+
+<div class="row">
+    <div class='col-sm-12'>
+        <ul class="breadcrumb">
+            <li><a href="/">Home</a></li>
+            <li><a href="/admin">Administration</a></li>
+            <li class="active">Employees</li>
+        </ul>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="well">
+            @using (Html.BeginForm())
+            {
+                if (!String.IsNullOrEmpty(ViewBag.Message))
+                {
+                    <div class='alert alert-success' role='alert'>
+                        <span class='glyphicon glyphicon-ok' aria-hidden='true'></span>
+                        <span class='sr-only'>Success: </span>
+                        @ViewBag.Message
+                    </div>
+                }
+                if (!Html.ViewData.ModelState.IsValid)
+                {
+                    <div class='alert alert-danger' role='alert'>
+                        <span class='glyphicon glyphicon-exclamation-sign' aria-hidden='true'></span>
+                        <span class='sr-only'>Error:</span>
+                        @Html.ValidationSummary("")
+                    </div>
+                }
+
+                <div style="display:table;width:100%;margin-top:15px;">
+                    <div style="display:table-row;">
+                        <div style="display:table-cell;width:100%;">
+                            <input id="searchterm" name="searchterm" type="text" placeholder="search for first or last name" class="form-control"
+                                   style="width:100%;max-width:none;" value='@Request["searchterm"]' />
+                        </div>
+                        <div style="display:table-cell;white-space:nowrap;font-size:1px;">
+                            <input type="submit" class="btn btn-default" style="margin-bottom:10px;" value="Search" />
+                            <a href="/Admin/EmployeeAdd" class="btn btn-default" style="margin-bottom:10px;">Add</a>
+                        </div>
+                    </div>
+                </div>
+            }
+            <table class="table demo table-bordered">
+                <thead>
+                    <tr>
+                        <th data-hide="">Last Name</th>
+                        <th data-hide="">First Name</th>
+                        <th data-hide="phone">Title</th>
+                        <th data-hide="all">Title Of Courtesy</th>
+                        <th data-hide="all">Birth Date</th>
+                        <th data-hide="all">Hire Date</th>
+                        <th data-hide="all">Address</th>
+                        <th data-hide="phone">City</th>
+                        <th data-hide="all">Region</th>
+                        <th data-hide="phone">Country</th>
+                        <th data-hide="all">Postal</th>
+                        <th data-hide="tablet,phone">Phone</th>
+                        <th data-hide="tablet,phone">Ext</th>
+                        <th data-hide="">Photo</th>
+                        <th data-hide="all">Notes</th>
+                        <th data-hide="all">Reports To</th>
+                        <th data-hide="all">Photo Path</th>
+                        <th data-hide="">Salary</th>
+                        <th data-hide="phone"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        int i = 0;
+                        foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@Html.DisplayFor(model => item.LastName)</td>
+                                <td>@Html.DisplayFor(model => item.FirstName)</td>
+                                <td>@Html.DisplayFor(model => item.Title)</td>
+                                <td>@Html.DisplayFor(model => item.TitleOfCourtesy)</td>
+                                <td>@Html.DisplayFor(model => item.BirthDate)</td>
+                                <td>@Html.DisplayFor(model => item.HireDate)</td>
+                                <td>@Html.DisplayFor(model => item.Address)</td>
+                                <td>@Html.DisplayFor(model => item.City)</td>
+                                <td>@Html.DisplayFor(model => item.Region)</td>
+                                <td>@Html.DisplayFor(model => item.Country)</td>
+                                <td>@Html.DisplayFor(model => item.PostalCode)</td>
+                                <td>@Html.DisplayFor(model => item.HomePhone)</td>
+                                <td>@Html.DisplayFor(model => item.Extension)</td>
+                                <td>
+                                    @if (item.Photo != null)
+                                    {
+                                        <img src="data:image/png;base64,@Html.Encode(System.Convert.ToBase64String(item.Photo))" style="width:100%;" />
+                                    }                              
+                                </td>
+                                <td>@Html.DisplayFor(model => item.Notes)</td>
+                                <td>@Html.DisplayFor(model => item.ReportsTo)</td>
+                                <td>@Html.DisplayFor(model => item.PhotoPath)</td>
+                                <td>@Html.DisplayFor(model => item.Salary)</td>
+
+                                <!-- Commands-->
+                                <td class="col-md-2">
+                                    <a href='/admin/employeeedit/@item.EmployeeID' class='button special'>Edit</a>
+                                    <a href='/admin/emplyeedelete/@item.EmployeeID' class='button special'>Delete</a>
+                                </td>
+
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    @Styles.Render("~/Scripts/footable-v2/css/footable.standalone.css")
+    @Scripts.Render("~/Scripts/footable-v2/js/footable.js")
+
+    <style type="text/css">
+    </style>
+    <script type="text/javascript">
+        jQuery(function ($) {
+            $('.table').footable();
+
+            $('.table').bind('footable_breakpoint', function () {
+                $('.table').trigger('footable_expand_first_row');
+            });
+        });
+    </script>
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

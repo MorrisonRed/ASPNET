@@ -849,7 +849,7 @@ namespace ASPNET.Models
             var supplierRepository = new AppCore.Suppliers.SupplierRepository<AppCore.Suppliers.Supplier>(ConfigurationManager.ConnectionStrings["DefaultConnection"].ToString());
             if (!String.IsNullOrEmpty(searchterm))
             {
-                suppliers = supplierRepository.GetSuppliers().Where(s => s.CompanyName.ToLower().Contains(searchterm)).OrderBy(s => s.CompanyName);
+                suppliers = supplierRepository.GetSuppliers().Where(s => s.CompanyName.ToLower().Contains(searchterm.ToLower())).OrderBy(s => s.CompanyName);
             }
             else
             {
@@ -1191,6 +1191,237 @@ namespace ASPNET.Models
 
             // Not Found
             return HttpNotFound();
+        }
+        #endregion
+
+        #region Customers
+        public ActionResult Customers(string searchterm)
+        {
+            ViewBag.PageTitle = "Customers";
+            ViewBag.Message = "";
+
+            IQueryable<AppCore.Customer.Customer> customers;
+            var customerRepository = new AppCore.Customer.CustomerRepository<AppCore.Customer.Customer>(ConfigurationManager.ConnectionStrings["DefaultConnection"].ToString());
+            if (!String.IsNullOrEmpty(searchterm))
+            {
+                customers = customerRepository.GetCustomers().Where(c => c.CompanyName.ToLower().Contains(searchterm.ToLower())).OrderBy(c => c.CompanyName);
+            }
+            else
+            {
+                customers = customerRepository.GetCustomers().OrderBy(c => c.CompanyName);
+            }
+
+            return View(customers);
+        }
+
+        public ActionResult CustomerAdd(CustomerAddViewModel model)
+        {
+            ViewBag.PageTitle = "Add Customer";
+            ViewBag.Message = "";
+
+            //load dropdownlists
+            var countryRepository = new AppCore.Country.CountryRepository<AppCore.Country.Country>(ConfigurationManager.ConnectionStrings["DefaultConnection"].ToString());
+            model.Countries = new SelectList(countryRepository.GetCountries().OrderBy(c => c.Name), "Code", "Name", "CAN");
+
+
+            return View(model);
+        }
+        [HttpPost, ValidateAntiForgeryToken]
+        public async Task<ActionResult> CustomerAdd(CustomerAddViewModel model, FormCollection form)
+        {
+            var countryRepository = new AppCore.Country.CountryRepository<AppCore.Country.Country>(ConfigurationManager.ConnectionStrings["DefaultConnection"].ToString());
+            var customerRepository = new AppCore.Customer.CustomerRepository<AppCore.Customer.Customer>(ConfigurationManager.ConnectionStrings["DefaultConnection"].ToString());
+
+            if (ModelState.IsValid)
+            {
+                AppCore.Customer.Customer customer = new AppCore.Customer.Customer()
+                {
+                    CustomerID = model.CustomerID.ToUpper(),
+                    CompanyName = model.CompanyName,
+                    ContactName = model.ContactName,
+                    ContactTitle = model.ContactTitle,
+                    Address = model.Address,
+                    City = model.City,
+                    Region = model.Region,
+                    Country = model.SelectedCountryID,
+                    PostalCode = model.PostalCode,
+                    Phone = model.Phone,
+                    Fax = model.Fax
+                };
+
+                var result = customerRepository.Add(customer);
+                if(result)
+                {
+                    ViewBag.Message = "customer added";
+                    model = new CustomerAddViewModel();
+                    model.Countries = new SelectList(countryRepository.GetCountries().OrderBy(c => c.Name), "Code", "Name", "CAN");
+                    ModelState.Clear();
+                    return View(model);                        
+                }
+            }
+
+            //not valid
+            model.Countries = new SelectList(countryRepository.GetCountries().OrderBy(c => c.Name), "Code", "Name", "CAN");
+
+            return View(model);
+        }
+
+        public ActionResult CustomerEdit(string id)
+        {
+            ViewBag.PageTitle = "Edit Customer";
+            ViewBag.Message = "";
+
+            var countryRepository = new AppCore.Country.CountryRepository<AppCore.Country.Country>(ConfigurationManager.ConnectionStrings["DefaultConnection"].ToString());
+            var customerRepository = new AppCore.Customer.CustomerRepository<AppCore.Customer.Customer>(ConfigurationManager.ConnectionStrings["DefaultConnection"].ToString());
+            var customer = customerRepository.FindById(id);
+
+            if (customer.IsEmpty())
+            {
+                return RedirectToAction("Error", "Home");
+            }
+
+            CustomerEditViewModel model = new CustomerEditViewModel()
+            {
+                CustomerID = customer.CustomerID,
+                CompanyName = customer.CompanyName,
+                ContactName = customer.ContactName,
+                ContactTitle = customer.ContactTitle,
+                Address = customer.Address,
+                City = customer.City,
+                Region = customer.Region,
+                PostalCode = customer.PostalCode,
+                Country = customer.Country,
+                Phone = customer.Phone,
+                Fax = customer.Fax
+            };
+
+         
+            model.Countries = new SelectList(countryRepository.GetCountries().OrderBy(c => c.Name), "Code", "Name");
+            model.SelectedCountryID = customer.Country;
+            return View(model);
+        }
+        [HttpPost, ValidateAntiForgeryToken]
+        public async Task<ActionResult> CustomerEdit(CustomerEditViewModel model, FormCollection form)
+        {
+            var countryRepository = new AppCore.Country.CountryRepository<AppCore.Country.Country>(ConfigurationManager.ConnectionStrings["DefaultConnection"].ToString());
+            var customerRepository = new AppCore.Customer.CustomerRepository<AppCore.Customer.Customer>(ConfigurationManager.ConnectionStrings["DefaultConnection"].ToString());
+
+            if (ModelState.IsValid)
+            {
+                var customer = customerRepository.FindById(model.CustomerID);
+                if (customer.IsEmpty())
+                {
+                    return HttpNotFound();
+                }
+
+                customer.CompanyName = model.CompanyName;
+                customer.ContactName = model.ContactName;
+                customer.ContactTitle = model.ContactTitle;
+                customer.Address = model.Address;
+                customer.City = model.City;
+                customer.Region = model.Region;
+                customer.PostalCode = model.PostalCode;
+                customer.Country = model.SelectedCountryID;
+                customer.Phone = model.Phone;
+                customer.Fax = model.Fax;
+
+                var result = customerRepository.Update(customer);
+                if (result)
+                {
+                    ViewBag.Message = "Customer Update";
+                    model.Countries = new SelectList(countryRepository.GetCountries().OrderBy(c => c.Name), "Code", "Name");
+                    model.SelectedCountryID = customer.Country;
+                    return View(model);
+                }
+
+                ModelState.AddModelError("", new Exception("failed to update customer"));
+            }
+
+            //not valid
+            model.Countries = new SelectList(countryRepository.GetCountries().OrderBy(c => c.Name), "Code", "Name");
+            return View(model);
+        }
+
+        public ActionResult CustomerDelete(string id = "")
+        {
+            ViewBag.PageTitle = "Delete Customer";
+            ViewBag.Message = "";
+
+            var customerRepository = new AppCore.Customer.CustomerRepository<AppCore.Customer.Customer>(ConfigurationManager.ConnectionStrings["DefaultConnection"].ToString());
+            var customer = customerRepository.FindById(id);
+
+            if (customer.IsEmpty())
+            {
+                return RedirectToAction("Error", "Home");
+            }
+
+            CustomerDeleteViewModel model = new CustomerDeleteViewModel()
+            {
+                CustomerID = customer.CustomerID,
+                CompanyName = customer.CompanyName,
+                ContactName = customer.ContactName,
+                ContactTitle = customer.ContactTitle,
+                Address = customer.Address,
+                City = customer.City,
+                Region = customer.Region,
+                PostalCode = customer.PostalCode,
+                Country = customer.Country,
+                Phone = customer.Phone,
+                Fax = customer.Fax
+            };
+
+            return View(model);
+        }
+        [HttpPost, ActionName("CustomerDelete"), ValidateAntiForgeryToken]
+        public async Task<ActionResult> CustomerDeleteConfirm(string id)
+        {
+            var customerRepository = new AppCore.Customer.CustomerRepository<AppCore.Customer.Customer>(ConfigurationManager.ConnectionStrings["DefaultConnection"].ToString());
+            var customer = customerRepository.FindById(id);
+
+            if (!customer.IsEmpty())
+            {
+                var result = customerRepository.Delete(customer);
+
+                if (result)
+                {
+                    ViewBag.Message = "customer deleted!";
+                    var model = new CustomerDeleteViewModel();
+                    //ModelState.Clear();
+                    return View(model);
+                }
+
+                return RedirectToAction("Customers", "Admin");
+            }
+
+            // Not Found
+            return HttpNotFound();
+        }
+        #endregion
+
+        #region Employees
+        public ActionResult Employees(string searchterm)
+        {
+            ViewBag.PageTitle = "Employees";
+            ViewBag.Message = "";
+
+            IQueryable<AppCore.Employee.Employee> employees;
+            var employeeRepository = new AppCore.Employee.EmployeeRepository<AppCore.Employee.Employee>(ConfigurationManager.ConnectionStrings["DefaultConnection"].ToString());
+            if (!String.IsNullOrEmpty(searchterm))
+            {
+                //search on multiple columns
+                var predicate = PredicateBuilder.False<AppCore.Employee.Employee>();
+                predicate = predicate.Or(e => e.LastName.ToLower().Contains(searchterm.ToLower())).Or(e=> e.FirstName.ToLower().Contains(searchterm.ToLower()));
+                employees = employeeRepository.GetEmployees().Where(predicate);
+
+                //employees = employeeRepository.GetEmployees().Where(e => e.LastName.ToLower().Contains(searchterm.ToLower())).OrderBy(e => e.LastName).ThenBy(e => e.FirstName);
+            }
+            else
+            {
+                employees = employeeRepository.GetEmployees().OrderBy(e => e.LastName).ThenBy(e => e.FirstName);
+            }
+
+            return View(employees);
+
         }
         #endregion
 
