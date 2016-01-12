@@ -1,6 +1,6 @@
 ﻿# Northwind.mvc4 Changelog
 
-### Version 0.0.7
+### Version 0.0.9
 <small><i>January 12, 2016</i></small>
 
 * **Add and Edit Customer Pages**<br/>
@@ -11,7 +11,7 @@
 <li><a href="http://www.albahari.com/nutshell/predicatebuilder.aspx" target="_blank">Predicate Builder</a></li>
 </ul>
 
-### Version 0.0.7
+### Version 0.0.8
 <small><i>January 11, 2016</i></small>
 
 * **Add and Edit Shipper Pages**<br/>
@@ -21,7 +21,7 @@
 <li>Added Shipper Add Page</li>
 </ul>
 
-### Version 0.0.6
+### Version 0.0.7
 <small><i>January 10, 2016</i></small>
 
 * **Add and Edit Supplier Pages**<br/>
