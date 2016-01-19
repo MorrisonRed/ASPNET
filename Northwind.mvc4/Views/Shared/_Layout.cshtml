@@ -19,6 +19,9 @@
       <script src="/Scripts/html5shiv.min.js"></script>
       <script src="/Scripts/respond.min.js"></script>
     <![endif]-->
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryui")
 </head>
 <body>
     <div class="navbar transparent navbar-inverse navbar-fixed-top hr">
@@ -96,7 +99,7 @@
         </div>
     </div>
 
-    @Scripts.Render("~/bundles/jquery")
+
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
 </body>

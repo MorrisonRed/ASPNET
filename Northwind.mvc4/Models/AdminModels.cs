@@ -464,4 +464,153 @@ namespace ASPNET.Models
         public string Fax { get; set; }
     }
     #endregion
+
+    #region Employee Models
+    public class EmployeeAddViewModel
+    {
+        public string SelectedCountryID { get; set; }
+        public System.Web.Mvc.SelectList Countries;
+        public int SelectedEmployeeID { get; set; }
+        public System.Web.Mvc.SelectList Employees;
+
+        [Display(Name = "Last Name"), Required]
+        public string LastName { get; set; }
+        [Display(Name = "First Name"), Required]
+        public string FirstName { get; set; }
+        [Display(Name = "Title")]
+        public string Title { get; set; }
+        [Display(Name = "Title of Courtesy")]
+        public string TitleOfCourtesy { get; set; }
+        [Display(Name = "Birth Date")]
+        public DateTime? BirthDate { get; set; }
+        [Display(Name = "Hire Date")]
+        public DateTime? HireDate { get; set; }
+        [Display(Name = "Address")]
+        public string Address { get; set; }
+        [Display(Name = "City")]
+        public string City { get; set; }
+        [Display(Name = "Region")]
+        public string Region { get; set; }
+        [Display(Name = "Postal Code")]
+        public string PostalCode { get; set; }
+        [Display(Name = "Country")]
+        public string Country { get; set; }
+        [Display(Name = "Home Phone")]
+        public string HomePhone { get; set; }
+        [Display(Name = "Extension")]
+        public string Extension { get; set; }
+        [Display(Name = "Photo")]
+        public byte[] Photo { get; set; }
+        [Display(Name = "Notes"), System.Web.Mvc.AllowHtml]
+        public string Notes { get; set; }
+        [Display(Name = "Reports To")]
+        public int? ReportsTo { get; set; }
+        [Display(Name = "Photo Path")]
+        public string PhotoPath { get; set; }
+        [Display(Name = "Salary")]
+        public decimal? Salary { get; set; }
+    }
+    public class EmployeeEditViewModel
+    {
+        public string SelectedCountryID { get; set; }
+        public System.Web.Mvc.SelectList Countries;
+        public int SelectedEmployeeID { get; set; }
+        public System.Web.Mvc.SelectList Employees;
+
+        [Display(Name = "Employee Id"), Key]
+        public int EmployeeID { get; set; }
+        [Display(Name = "Last Name"), Required]
+        public string LastName { get; set; }
+        [Display(Name = "First Name"), Required]
+        public string FirstName { get; set; }
+        [Display(Name = "Title")]
+        public string Title { get; set; }
+        [Display(Name = "Title of Courtesy")]
+        public string TitleOfCourtesy { get; set; }
+        [Display(Name = "Birth Date")]
+        public DateTime? BirthDate { get; set; }
+        [Display(Name = "Hire Date")]
+        public DateTime? HireDate { get; set; }
+        [Display(Name = "Address")]
+        public string Address { get; set; }
+        [Display(Name = "City")]
+        public string City { get; set; }
+        [Display(Name = "Region")]
+        public string Region { get; set; }
+        [Display(Name = "Postal Code")]
+        public string PostalCode { get; set; }
+        [Display(Name = "Country")]
+        public string Country { get; set; }
+        [Display(Name = "Home Phone")]
+        public string HomePhone { get; set; }
+        [Display(Name = "Extension")]
+        public string Extension { get; set; }
+        [Display(Name = "Photo")]
+        public byte[] Photo { get; set; }
+
+        private string _notes; 
+        [Display(Name = "Notes"), System.Web.Mvc.AllowHtml]
+        public string Notes
+        {
+            get
+            {
+                return HttpUtility.HtmlDecode(_notes);
+            }
+            set
+            {
+                _notes = HttpUtility.HtmlEncode(value);
+            }
+        }
+
+        [Display(Name = "Reports To")]
+        public int? ReportsTo { get; set; }
+        [Display(Name = "Photo Path")]
+        public string PhotoPath { get; set; }
+        [Display(Name = "Salary")]
+        public decimal? Salary { get; set; }
+    }
+    public class EmployeeDeleteViewModel
+    {
+        [Display(Name = "Employee Id"), Key]
+        public int EmployeeID { get; set; }
+        [Display(Name = "Last Name"), Required]
+        public string LastName { get; set; }
+        [Display(Name = "First Name"), Required]
+        public string FirstName { get; set; }
+        [Display(Name = "Title")]
+        public string Title { get; set; }
+        [Display(Name = "Title of Courtesy")]
+        public string TitleOfCourtesy { get; set; }
+        [Display(Name = "Birth Date")]
+        public DateTime? BirthDate { get; set; }
+        [Display(Name = "Hire Date")]
+        public DateTime? HireDate { get; set; }
+        [Display(Name = "Address")]
+        public string Address { get; set; }
+        [Display(Name = "City")]
+        public string City { get; set; }
+        [Display(Name = "Region")]
+        public string Region { get; set; }
+        [Display(Name = "Postal Code")]
+        public string PostalCode { get; set; }
+        [Display(Name = "Country")]
+        public string Country { get; set; }
+        [Display(Name = "Home Phone")]
+        public string HomePhone { get; set; }
+        [Display(Name = "Extension")]
+        public string Extension { get; set; }
+        [Display(Name = "Photo")]
+        public byte[] Photo { get; set; }
+        [Display(Name = "Notes"), System.Web.Mvc.AllowHtml]
+        public string Notes { get; set; }
+        [Display(Name = "Reports To")]
+        public int? ReportsTo { get; set; }
+        [Display(Name = "Reports To")]
+        public string ReportsToName { get; set; }
+        [Display(Name = "Photo Path")]
+        public string PhotoPath { get; set; }
+        [Display(Name = "Salary")]
+        public decimal? Salary { get; set; }
+    }
+    #endregion
 }

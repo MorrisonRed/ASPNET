@@ -14,6 +14,10 @@
     <li><a href="http://fooplugins.com/plugins/footable-jquery/" target="_blank">FooTable - Awesome Responsive Tables v 2.0.3</a></li>
     <li><a href="http://www.albahari.com/nutshell/predicatebuilder.aspx" target="_blank">Predicate Builder</a></li>
     <li>
+      <a href="http://ckeditor.com/" target="_blank">CKEditor 4.0</a>
+    </li>
+    <li><a href="http://jqueryui.com/" target="_blank">jQuery UI 1.11.4</a></li>
+    <li>
       Images provided by <a href="http://unsplash.com/" target="_blank">Unsplash</a>
     </li>
     <li>Masked Input plugin for jQuery</li>

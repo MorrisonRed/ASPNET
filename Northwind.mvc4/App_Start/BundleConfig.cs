@@ -11,6 +11,9 @@ namespace ASPNET
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
                         "~/Scripts/jquery-{version}.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/jqueryui").Include(
+                        "~/Scripts/jquery-ui-1.11.4/jquery-ui.min.js"));
+
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
                         "~/Scripts/jquery.validate*"));
 
@@ -27,7 +30,8 @@ namespace ASPNET
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/bootstrap-datepicker.css",  // ** NEW for Bootstrap Datepicker
-                      "~/Content/bootstrap.northwind.css"));
+                      "~/Content/bootstrap.northwind.css",
+                      "~/Scripts/jquery-ui-1.11.4/jquery-ui.min.css"));
 
             bundles.Add(new ScriptBundle("~/bundles/maskedinput").Include(
                     "~/Scripts/maskedinput/jquery.maskedinput.min.js", 

@@ -474,8 +474,7 @@ namespace ASPNET.Models
             return View();
 
         }
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+        [HttpPost, ValidateAntiForgeryToken]
         public async Task<ActionResult> CategoryAdd(CategoryAddViewModel model, FormCollection form, HttpPostedFileBase NewPicture)
         {
             if (ModelState.IsValid)
@@ -531,8 +530,7 @@ namespace ASPNET.Models
 
             return View(model);
         }
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+        [HttpPost, ValidateAntiForgeryToken]
         public async Task<ActionResult> CategoryEdit(CategoryEditViewModel model, FormCollection form, HttpPostedFileBase NewPicture)
         {
             if (ModelState.IsValid)
@@ -1422,6 +1420,248 @@ namespace ASPNET.Models
 
             return View(employees);
 
+        }
+
+        public ActionResult EmployeeAdd(EmployeeAddViewModel model)
+        {
+            ViewBag.PageTitle = "Add Employee";
+            ViewBag.Message = "";
+
+            var countryRepository = new AppCore.Country.CountryRepository<AppCore.Country.Country>(ConfigurationManager.ConnectionStrings["DefaultConnection"].ToString());
+            model.Countries = new SelectList(countryRepository.GetCountries().OrderBy(c => c.Name), "Code", "Name", "CAN");
+
+            var employeeRepository = new AppCore.Employee.EmployeeRepository<AppCore.Employee.Employee>(ConfigurationManager.ConnectionStrings["DefaultConnection"].ToString());
+            model.Employees = new SelectList(employeeRepository.GetEmployees().OrderBy(e => e.LastName).OrderBy(e => e.FirstName), "EmployeeID", "LastName");
+
+            return View(model);
+        }
+        [HttpPost, ValidateAntiForgeryToken]
+        public async Task<ActionResult> EmployeeAdd(EmployeeAddViewModel model, FormCollection form, HttpPostedFileBase NewPhoto)
+        {
+            var employeeRepository = new AppCore.Employee.EmployeeRepository<AppCore.Employee.Employee>(ConfigurationManager.ConnectionStrings["DefaultConnection"].ToString());
+            var countryRepository = new AppCore.Country.CountryRepository<AppCore.Country.Country>(ConfigurationManager.ConnectionStrings["DefaultConnection"].ToString());
+
+            if (ModelState.IsValid)
+            {
+                var employee = new AppCore.Employee.Employee()
+                {
+                    LastName = model.LastName,
+                    FirstName = model.FirstName,
+                    Title = model.Title,
+                    TitleOfCourtesy = model.TitleOfCourtesy,
+                    BirthDate = model.BirthDate,
+                    HireDate = model.HireDate,
+                    Address = model.Address,
+                    City = model.City,
+                    Region = model.Region,
+                    PostalCode = model.PostalCode,
+                    Country = model.SelectedCountryID,
+                    HomePhone = model.HomePhone,
+                    Extension = model.Extension,
+                    //Photo = "", 
+                    Notes = model.Notes,
+                    ReportsTo = model.SelectedEmployeeID,
+                    PhotoPath = model.PhotoPath,
+                    Salary = model.Salary
+                };
+
+                //get picture
+                if (NewPhoto != null && NewPhoto.ContentLength > 0)
+                {
+                    string filetype = NewPhoto.ContentType;
+                    Int32 length = NewPhoto.ContentLength;
+                    byte[] tempImage = new byte[length];
+                    NewPhoto.InputStream.Read(tempImage, 0, length);
+                    employee.Photo = tempImage;
+                    model.Photo = tempImage;
+                }
+
+                var result = employeeRepository.Add(employee);
+                if (result)
+                {
+                    ViewBag.Message = "Employee added!";
+                    model = new EmployeeAddViewModel();
+                    model.Countries = new SelectList(countryRepository.GetCountries().OrderBy(c => c.Name), "Code", "Name", "CAN");
+                    model.Employees = new SelectList(employeeRepository.GetEmployees().OrderBy(e => e.LastName).OrderBy(e => e.FirstName), "EmployeeID", "LastName");
+                    
+                    ModelState.Clear();
+                    return View(model);
+                }
+                ModelState.AddModelError("", new Exception("failed to add employee"));
+                //AddErrors(result);
+            }
+
+            //not valid
+            model.Countries = new SelectList(countryRepository.GetCountries().OrderBy(c => c.Name), "Code", "Name", "CAN");
+            model.Employees = new SelectList(employeeRepository.GetEmployees().OrderBy(e => e.LastName).OrderBy(e => e.FirstName), "EmployeeID", "LastName");
+
+            return View(model);
+        }
+
+        public ActionResult EmployeeEdit(int id)
+        {
+            ViewBag.PageTitle = "Edit Employee";
+            ViewBag.Message = "";
+
+            var employeeRepository = new AppCore.Employee.EmployeeRepository<AppCore.Employee.Employee>(ConfigurationManager.ConnectionStrings["DefaultConnection"].ToString());
+            var countryRepository = new AppCore.Country.CountryRepository<AppCore.Country.Country>(ConfigurationManager.ConnectionStrings["DefaultConnection"].ToString());
+            var employee = employeeRepository.FindById(id);
+
+            if (employee.IsEmpty())
+            {
+                //category did not load go to error page
+                return RedirectToAction("Error", "Home");
+            }
+
+            EmployeeEditViewModel model = new EmployeeEditViewModel();
+            model.EmployeeID = employee.EmployeeID;
+            model.LastName = employee.LastName;
+            model.FirstName = employee.FirstName;
+            model.Title = employee.Title;
+            model.TitleOfCourtesy = employee.TitleOfCourtesy;
+            model.BirthDate = employee.BirthDate;
+            model.HireDate = employee.HireDate;
+            model.Address = employee.Address;
+            model.City = employee.City;
+            model.Region = employee.Region;
+            model.PostalCode = employee.PostalCode;
+            model.Country = employee.Country;
+            model.HomePhone = employee.HomePhone;
+            model.Extension = employee.Extension;
+            model.Photo = employee.Photo;
+            model.Notes = employee.Notes;
+            model.ReportsTo = employee.EmployeeID;
+            model.PhotoPath = employee.PhotoPath;
+            model.Salary = employee.Salary;
+
+       
+            model.Countries = new SelectList(countryRepository.GetCountries().OrderBy(c => c.Name), "Code", "Name", "CAN");
+            model.SelectedCountryID = employee.Country;
+            model.Employees = new SelectList(employeeRepository.GetEmployees().OrderBy(e => e.LastName).OrderBy(e => e.FirstName), "EmployeeID", "LastName");
+            if(model.ReportsTo.HasValue) model.SelectedEmployeeID = (int)model.ReportsTo;
+            return View(model);
+        }
+        [HttpPost, ValidateAntiForgeryToken]
+        public async Task<ActionResult> EmployeeEdit(EmployeeEditViewModel model, FormCollection form, HttpPostedFileBase NewPhoto)
+        {
+            var countryRepository = new AppCore.Country.CountryRepository<AppCore.Country.Country>(ConfigurationManager.ConnectionStrings["DefaultConnection"].ToString());
+            var employeeRepository = new AppCore.Employee.EmployeeRepository<AppCore.Employee.Employee>(ConfigurationManager.ConnectionStrings["DefaultConnection"].ToString());
+
+            if (ModelState.IsValid)
+            {
+                var employee = employeeRepository.FindById(model.EmployeeID); 
+                employee.LastName = model.LastName;
+                employee.FirstName = model.FirstName;
+                employee.Title = model.Title;
+                employee.TitleOfCourtesy = model.TitleOfCourtesy;
+                employee.BirthDate = model.BirthDate;
+                employee.HireDate = model.HireDate;
+                employee.Address = model.Address;
+                employee.City = model.City;
+                employee.Region = model.Region;
+                employee.PostalCode = model.PostalCode;
+                employee.Country = model.SelectedCountryID;
+                employee.HomePhone = model.HomePhone;
+                employee.Extension = model.Extension;
+                employee.Notes = model.Notes;
+                employee.ReportsTo = model.SelectedEmployeeID;
+                employee.PhotoPath = model.PhotoPath;
+                employee.Salary = model.Salary;
+                //get picture
+                if (NewPhoto != null && NewPhoto.ContentLength > 0)
+                {
+                    string filetype = NewPhoto.ContentType;
+                    Int32 length = NewPhoto.ContentLength;
+                    byte[] tempImage = new byte[length];
+                    NewPhoto.InputStream.Read(tempImage, 0, length);
+                    employee.Photo = tempImage;
+                    model.Photo = tempImage;
+                }
+                else
+                {
+                    model.Photo = employee.Photo;
+                }
+
+                //update category        
+                var result = employeeRepository.Update(employee);
+                if (result)
+                {
+                    ViewBag.Message = "employee updated!";
+                    model.Countries = new SelectList(countryRepository.GetCountries().OrderBy(c => c.Name), "Code", "Name");
+                    model.SelectedCountryID = employee.Country;
+                    model.Employees = new SelectList(employeeRepository.GetEmployees().OrderBy(e => e.LastName).OrderBy(e => e.FirstName), "EmployeeID", "LastName");
+                    if(employee.ReportsTo.HasValue) model.SelectedEmployeeID = (int)employee.ReportsTo;
+                    return View(model);
+                }
+                ModelState.AddModelError("", new Exception("failed to update employee"));
+                //AddErrors(result);
+            }
+            return View(model);
+        }
+        
+        public ActionResult EmployeeDelete(int id)
+        {
+            ViewBag.PageTitle = "Delete Employee";
+            ViewBag.Message = "";
+
+            var employeeRepository = new AppCore.Employee.EmployeeRepository<AppCore.Employee.Employee>(ConfigurationManager.ConnectionStrings["DefaultConnection"].ToString());
+            var countryRepository = new AppCore.Country.CountryRepository<AppCore.Country.Country>(ConfigurationManager.ConnectionStrings["DefaultConnection"].ToString());
+            var employee = employeeRepository.FindById(id);
+           
+            if (employee.IsEmpty())
+            {
+                return RedirectToAction("Error", "Home");
+            }
+
+            AppCore.Employee.Employee manager = new AppCore.Employee.Employee(); 
+            if (employee.ReportsTo.HasValue) manager = employeeRepository.FindById((int)employee.ReportsTo);
+
+            EmployeeDeleteViewModel model = new EmployeeDeleteViewModel();
+            model.LastName = employee.LastName;
+            model.FirstName = employee.FirstName;
+            model.Title = employee.Title;
+            model.TitleOfCourtesy = employee.TitleOfCourtesy;
+            model.BirthDate = employee.BirthDate;
+            model.HireDate = employee.HireDate;
+            model.Address = employee.Address;
+            model.City = employee.City;
+            model.Region = employee.Region;
+            model.PostalCode = employee.PostalCode;
+            model.Country = employee.Country;
+            model.HomePhone = employee.HomePhone;
+            model.Extension = employee.Extension;
+            model.Photo = employee.Photo;
+            model.Notes = employee.Notes;
+            model.ReportsTo = employee.EmployeeID;
+            if (!manager.IsEmpty()) model.ReportsToName = string.Format("{0} {1}", manager.FirstName, manager.LastName);
+            model.PhotoPath = employee.PhotoPath;
+            model.Salary = employee.Salary;
+
+            return View(model);
+        }
+        [HttpPost, ActionName("EmployeeDelete"), ValidateAntiForgeryToken]
+        public async Task<ActionResult> EmployeeDeleteConfirm(int id)
+        {
+            var employeeRepository = new AppCore.Employee.EmployeeRepository<AppCore.Employee.Employee>(ConfigurationManager.ConnectionStrings["DefaultConnection"].ToString());
+            var employee = employeeRepository.FindById(id);
+
+            if (!employee.IsEmpty())
+            {
+                var result = employeeRepository.Delete(employee);
+
+                if (result)
+                {
+                    ViewBag.Message = "employee deleted!";
+                    var model = new EmployeeDeleteViewModel();
+                    //ModelState.Clear();
+                    return View(model);
+                }
+
+                return RedirectToAction("Employees", "Admin");
+            }
+
+            // Not Found
+            return HttpNotFound();
         }
         #endregion
 

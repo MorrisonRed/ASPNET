@@ -26,20 +26,36 @@ namespace AppCore.Employee
         {
             using (var conn = new SqlConnection(_connectionString))
             {
-                var parameters = new Dictionary<string, object>();
-                //auto load all paramters for each public property of object
-                Type type = typeof(TEmployee);
-                var properties = type.GetProperties();
-                foreach (PropertyInfo info in properties)
+                var parameters = new Dictionary<string, object>
                 {
-                    var attribute = Attribute.GetCustomAttribute(info, typeof(KeyAttribute)) as KeyAttribute;
-                    //do not add [Key] property to insert statement as it is the Primary Key
-                    if (attribute == null)
-                    {
-                        var value = (info.GetValue(employee, null) == null) ? DBNull.Value : info.GetValue(employee, null);
-                        parameters.Add("@" + info.Name, value);
-                    }      
-                }
+                    {"@LastName", employee.LastName},
+                    {"@FirstName", employee.FirstName },
+                    {"@Title", employee.Title },
+                    {"@TitleOfCourtesy", employee.TitleOfCourtesy },
+                    {"@Address", employee.Address },
+                    {"@City", employee.City },
+                    {"@Region", employee.Region },
+                    {"@PostalCode", employee.PostalCode },
+                    {"@Country", employee.Country },
+                    {"@HomePhone", employee.HomePhone },
+                    {"@Extension", employee.Extension },
+                    {"@Notes", employee.Notes },
+                    {"@ReportsTo", employee.ReportsTo },
+                    {"@PhotoPath", employee.PhotoPath },
+                    {"@Salary", employee.Salary }
+                };
+                if (employee.Photo == null)
+                    parameters.Add("@Photo", DBNull.Value);
+                else
+                    parameters.Add("@Photo", employee.Photo);
+                if (employee.BirthDate.HasValue)
+                    parameters.Add("@BirthDate", employee.BirthDate.Value);
+                else
+                    parameters.Add("@BirthDate", DBNull.Value);
+                if (employee.HireDate.HasValue)
+                    parameters.Add("@HireDate", employee.HireDate.Value);
+                else
+                    parameters.Add("@HireDate", DBNull.Value);
 
                 var result = SqlHelper.ExecuteNonQuery(conn,
                         @"INSERT INTO Employees(LastName,FirstName,Title,TitleOfCourtesy,BirthDate,HireDate,Address,City,Region,PostalCode,
@@ -61,16 +77,29 @@ namespace AppCore.Employee
                 var properties = type.GetProperties();
                 foreach (PropertyInfo info in properties)
                 {
-                    var value = (info.GetValue(employee, null) == null) ? DBNull.Value : info.GetValue(employee, null);
-                    parameters.Add("@" + info.Name, value);
+                    if (info.GetValue(employee, null) == null)
+                        parameters.Add("@" + info.Name, DBNull.Value);
+                    else
+                        parameters.Add("@" + info.Name, info.GetValue(employee, null));
                 }
 
-                var result = SqlHelper.ExecuteNonQuery(conn,
-                            @"UPDATE Employees SET LastName=@LastName,FirstName=@FirstName,Title=@Title,TitleOfCourtesy=@TitleOfCourtesy,
+                String query = "";
+                if(employee.Photo == null)
+                {
+                    query = @"UPDATE Employees SET LastName=@LastName,FirstName=@FirstName,Title=@Title,TitleOfCourtesy=@TitleOfCourtesy,
+                                BirthDate=@BirthDate,HireDate=@HireDate,Address=@Address,City=@City,Region=@Region,PostalCode=@PostalCode,
+                                Country=@Country,HomePhone=@HomePhone,Extension=@Extension,Notes=@Notes,ReportsTo=@ReportsTo,
+                                PhotoPath=@PhotoPath,Salary=@Salary WHERE EmployeeID=@EmployeeID";
+                }
+                else
+                {
+                    query = @"UPDATE Employees SET LastName=@LastName,FirstName=@FirstName,Title=@Title,TitleOfCourtesy=@TitleOfCourtesy,
                                 BirthDate=@BirthDate,HireDate=@HireDate,Address=@Address,City=@City,Region=@Region,PostalCode=@PostalCode,
                                 Country=@Country,HomePhone=@HomePhone,Extension=@Extension,Photo=@Photo,Notes=@Notes,ReportsTo=@ReportsTo,
-                                PhotoPath=@PhotoPath,Salary=@Salary WHERE EmployeeID=@EmployeeID",
-                            parameters);
+                                PhotoPath=@PhotoPath,Salary=@Salary WHERE EmployeeID=@EmployeeID";
+                }
+                  
+                var result = SqlHelper.ExecuteNonQuery(conn, query, parameters);
 
                 return true;
             }
@@ -94,7 +123,7 @@ namespace AppCore.Employee
         #endregion
 
         #region Queries
-        public TEmployee FindById(string id)
+        public TEmployee FindById(int id)
         {
             using (var conn = new SqlConnection(_connectionString))
             {
@@ -106,7 +135,7 @@ namespace AppCore.Employee
                 var reader = SqlHelper.ExecuteReader(conn, CommandType.Text,
                     @"SELECT EmployeeID,LastName,FirstName,Title,TitleOfCourtesy,BirthDate,HireDate,Address,
                         City,Region,PostalCode,Country,HomePhone,Extension,Photo,Notes,ReportsTo,PhotoPath,
-                        Salary WHERE EmployeeID=@ID",
+                        Salary FROM Employees WHERE EmployeeID=@ID",
                     parameters);
 
                 var employee = (TEmployee)Activator.CreateInstance(typeof(TEmployee));

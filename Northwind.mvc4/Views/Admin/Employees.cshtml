@@ -67,7 +67,6 @@
                         <th data-hide="">Photo</th>
                         <th data-hide="all">Notes</th>
                         <th data-hide="all">Reports To</th>
-                        <th data-hide="all">Photo Path</th>
                         <th data-hide="">Salary</th>
                         <th data-hide="phone"></th>
                     </tr>
@@ -94,18 +93,17 @@
                                 <td>
                                     @if (item.Photo != null)
                                     {
-                                        <img src="data:image/png;base64,@Html.Encode(System.Convert.ToBase64String(item.Photo))" style="width:100%;" />
+                                        <img src="data:image/png;base64,@Html.Encode(System.Convert.ToBase64String(item.Photo))" style="max-height:60px;" />
                                     }                              
                                 </td>
                                 <td>@Html.DisplayFor(model => item.Notes)</td>
                                 <td>@Html.DisplayFor(model => item.ReportsTo)</td>
-                                <td>@Html.DisplayFor(model => item.PhotoPath)</td>
                                 <td>@Html.DisplayFor(model => item.Salary)</td>
 
                                 <!-- Commands-->
                                 <td class="col-md-2">
                                     <a href='/admin/employeeedit/@item.EmployeeID' class='button special'>Edit</a>
-                                    <a href='/admin/emplyeedelete/@item.EmployeeID' class='button special'>Delete</a>
+                                    <a href='/admin/employeedelete/@item.EmployeeID' class='button special'>Delete</a>
                                 </td>
 
                             </tr>
