@@ -1,5 +1,5 @@
 <h2>Northwind MVC Project</h2>
-
+[![Stories in Ready](https://badge.waffle.io/MorrisonRed/ASPNET.png?label=ready&title=Ready)](https://waffle.io/MorrisonRed/ASPNET)
 <p>
   <ul>
     <li>.Net 4.5.1</li>
