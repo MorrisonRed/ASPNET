@@ -2,6 +2,18 @@
 
 ### Version 0.0.10
 <small><i>January 19, 2016</i></small>
+* **Add and Edit Region Pages**<br/>
+<ul>
+<li>Added Region List Page</li>
+<li>Added Region Edit Page</li>
+<li>Added Region Add Page</li>
+<li>
+    <a href="https://msdn.microsoft.com/en-us/library/2tw134k3.aspx" target="_blank">Customer Configuration Section</a>
+</li>
+</ul>
+
+### Version 0.0.10
+<small><i>January 19, 2016</i></small>
 * **Add and Edit Employee Pages**<br/>
 <ul>
 <li>Added Employee List Page</li>

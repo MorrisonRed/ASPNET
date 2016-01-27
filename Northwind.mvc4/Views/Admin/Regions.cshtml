@@ -1,0 +1,111 @@
+﻿@model IEnumerable<AppCore.Region.Region>
+@{
+    ViewBag.Title = "Regions";
+}
+
+<div class="row">
+    <div class='col-sm-12'>
+        <ul class="breadcrumb">
+            <li><a href="/">Home</a></li>
+            <li><a href="/admin">Administration</a></li>
+            <li class="active">Regions</li>
+        </ul>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="well">
+            @using (Html.BeginForm())
+            {
+                if (!String.IsNullOrEmpty(ViewBag.Message))
+                {
+                    <div class='alert alert-success' role='alert'>
+                        <span class='glyphicon glyphicon-ok' aria-hidden='true'></span>
+                        <span class='sr-only'>Success: </span>
+                        @ViewBag.Message
+                    </div>
+                }
+                if (!Html.ViewData.ModelState.IsValid)
+                {
+                    <div class='alert alert-danger' role='alert'>
+                        <span class='glyphicon glyphicon-exclamation-sign' aria-hidden='true'></span>
+                        <span class='sr-only'>Error:</span>
+                        @Html.ValidationSummary("")
+                    </div>
+                }
+
+                <div style="display:table;width:100%;margin-top:15px;">
+                    <div style="display:table-row;">
+                        <div style="display:table-cell;width:100%;">
+                            <input id="searchterm" name="searchterm" type="text" placeholder="search for category" class="form-control"
+                                   style="width:100%;max-width:none;" value='@Request["searchterm"]' />
+                        </div>
+                        <div style="display:table-cell;white-space:nowrap;font-size:1px;">
+                            <input type="submit" class="btn btn-default" style="margin-bottom:10px;" value="Search" />
+                            <a href="/Admin/RegionAdd" class="btn btn-default" style="margin-bottom:10px;">Add</a>
+                        </div>
+                    </div>
+                </div>
+            }
+            <table class="table demo table-bordered">
+                <thead>
+                    <tr>
+                        <th data-hide="">Discription</th>
+                        <th data-hide=""></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        int i = 0;
+                        foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@Html.DisplayFor(model => item.RegionDescription)</td>
+
+                                <!-- Commands-->
+                                <td class="col-md-2">
+                                    <a href='/admin/regionedit/@item.RegionID' class='button special'>Edit</a>
+                                    <a href='/admin/regiondelete/@item.RegionID' class='button special'>Delete</a>
+                                </td>
+
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    @Styles.Render("~/Scripts/footable-v2/css/footable.standalone.css")
+    @Scripts.Render("~/Scripts/footable-v2/js/footable.js")
+
+    <style type="text/css">
+    </style>
+    <script type="text/javascript">
+        jQuery(function ($) {
+            $('.table').footable();
+
+            $('.table').bind('footable_breakpoint', function () {
+                $('.table').trigger('footable_expand_first_row');
+            });
+        });
+    </script>
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

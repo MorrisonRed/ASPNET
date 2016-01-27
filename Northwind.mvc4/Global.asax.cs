@@ -17,6 +17,14 @@ namespace ASPNET
     {
         protected void Application_Start()
         {
+            //load application configuration 
+            var appConfiguration = ApplicationConfiguration.Instance;
+
+            //this throw and error
+            //var config = new AppCore.ApplicationConfiguration();
+            //ApplicationConfiguration.Save(config);
+
+
             AreaRegistration.RegisterAllAreas();
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);

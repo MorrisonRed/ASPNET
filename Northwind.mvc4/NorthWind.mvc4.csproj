@@ -157,7 +157,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="App\CalculatorOp.cs" />
+    <Compile Include="App\DBResourceManager\IDBContext.cs" />
+    <Compile Include="App\Region\RegionRepository.cs" />
     <Compile Include="App\Category\CategoryRepository.cs" />
     <Compile Include="App\Category\ICategory.cs" />
     <Compile Include="App\Category\Category.cs" />
@@ -171,6 +172,8 @@
     <Compile Include="App\Customer\ICustomer.cs" />
     <Compile Include="App\Country\CountryRepository.cs" />
     <Compile Include="App\Customer\CustomerRepository.cs" />
+    <Compile Include="App\DBResourceManager\DBContext.cs" />
+    <Compile Include="App\ApplicationConfiguration.cs" />
     <Compile Include="App\Employee\EmployeeRepository.cs" />
     <Compile Include="App\Employee\Employee.cs" />
     <Compile Include="App\Employee\IEmployee.cs" />
@@ -192,6 +195,11 @@
     <Compile Include="App\Suppliers\SupplierRepository.cs" />
     <Compile Include="App\Territory\ITerritory.cs" />
     <Compile Include="App\Territory\Territory.cs" />
+    <Compile Include="App\TestDemo\CalculatorOp.cs" />
+    <Compile Include="App\TestDemo\EnemyFactory.cs" />
+    <Compile Include="App\TestDemo\NameJoiner.cs" />
+    <Compile Include="App\TestDemo\PlayerCharacter.cs" />
+    <Compile Include="App\TestDemo\SpecialDateStore.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\IdentityConfig.cs" />
@@ -700,6 +708,10 @@
     <Content Include="Views\Admin\EmployeeAdd.cshtml" />
     <Content Include="Views\Admin\EmployeeEdit.cshtml" />
     <Content Include="Views\Admin\EmployeeDelete.cshtml" />
+    <Content Include="Views\Admin\Regions.cshtml" />
+    <Content Include="Views\Admin\RegionAdd.cshtml" />
+    <Content Include="Views\Admin\RegionEdit.cshtml" />
+    <Content Include="Views\Admin\RegionDelete.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

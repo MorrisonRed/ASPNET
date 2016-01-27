@@ -55,6 +55,16 @@
       </smtp>
     </mailSettings>
   </system.net>
+  <ApplicationConfiguration remoteOnly="false">
+    <defaultSettings connectionString="DefaultConnection"
+                     dbType="MySQL"
+                     defaultRole="Administrator"
+                     supportEmail="youremail@abc.com" />
+    <facebook appId="" appSecret="" />
+    <twitter consumerKey="" consumerSecret="" />
+    <microsoft clientId="" clientSecret="" />
+    <google clientId="" clientSecret="" />
+  </ApplicationConfiguration>
   <runtime>
     <assemblyBinding xmlns="urn:schemas-microsoft-com:asm.v1">
       <dependentAssembly>

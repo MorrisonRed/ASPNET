@@ -613,4 +613,28 @@ namespace ASPNET.Models
         public decimal? Salary { get; set; }
     }
     #endregion
+
+    #region Region Models
+    public class RegionAddViewModel
+    {
+        [Display(Name = "Description"), Required]
+        public string RegionDescription { get; set; }
+    }
+    public class RegionEditViewModel
+    {
+        [Display(Name = "Id"), Key, Required]
+        public int RegionID { get; set; }
+        [Display(Name = "Description"), Required]
+        public string RegionDescription { get; set; }
+    }
+    public class RegionDeleteViewModel
+    {
+        public bool ShowDeleteButton = true;
+
+        [Display(Name = "Id"), Key, Required]
+        public int RegionID { get; set; }
+        [Display(Name = "Description"), Required]
+        public string RegionDescription { get; set; }
+    }
+    #endregion
 }

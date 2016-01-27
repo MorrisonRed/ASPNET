@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 
 namespace AppCore.Region
 {
-    interface IRegion
+    public interface IRegion
     {
+        int RegionID { get; set; }
+        string RegionDescription { get; set; }
+
+        bool IsEmpty();
     }
 }

@@ -1202,7 +1202,9 @@ namespace ASPNET.Models
             var customerRepository = new AppCore.Customer.CustomerRepository<AppCore.Customer.Customer>(ConfigurationManager.ConnectionStrings["DefaultConnection"].ToString());
             if (!String.IsNullOrEmpty(searchterm))
             {
-                customers = customerRepository.GetCustomers().Where(c => c.CompanyName.ToLower().Contains(searchterm.ToLower())).OrderBy(c => c.CompanyName);
+                customers = customerRepository.GetCustomers().Where(c => c.CompanyName.ToLower()
+                    .Contains(searchterm.ToLower()))
+                    .OrderBy(c => c.CompanyName);
             }
             else
             {
@@ -1658,6 +1660,158 @@ namespace ASPNET.Models
                 }
 
                 return RedirectToAction("Employees", "Admin");
+            }
+
+            // Not Found
+            return HttpNotFound();
+        }
+        #endregion
+
+        #region Regions
+        public ActionResult Regions(string searchterm)
+        {
+            ViewBag.PageTitle = "Regions";
+            ViewBag.Message = "";
+
+            IQueryable<AppCore.Region.Region> regions;
+            var regionRepository = new AppCore.Region.RegionRepository<AppCore.Region.Region>(ConfigurationManager.ConnectionStrings["DefaultConnection"].ToString());
+            if (string.IsNullOrEmpty(searchterm))
+            {
+                regions = regionRepository.GetRegions().OrderBy(r => r.RegionDescription);
+            }
+            else
+            {
+                regions = regionRepository.GetRegions().Where(r => r.RegionDescription.ToLower()
+                    .Contains(searchterm.ToLower()))
+                    .OrderBy(r => r.RegionDescription);
+            }
+
+            return View(regions);
+        }
+
+        public ActionResult RegionAdd()
+        {
+            ViewBag.PageTitle = "Add Region";
+            ViewBag.Message = "";
+
+            return View();
+        }
+        [HttpPost, ValidateAntiForgeryToken]
+        public async Task<ActionResult> RegionAdd(RegionAddViewModel model, FormCollection form)
+        {
+            var regionRepository = new AppCore.Region.RegionRepository<AppCore.Region.Region>(ConfigurationManager.ConnectionStrings["DefaultConnection"].ToString());
+            if (ModelState.IsValid)
+            {
+                AppCore.Region.Region region = new AppCore.Region.Region()
+                {
+                    RegionDescription = model.RegionDescription
+                };
+
+                var result = await regionRepository.AddAsync(region);
+                if (result == true)
+                {
+                    ViewBag.Message = "region added";
+                    model = new RegionAddViewModel(); 
+                    ModelState.Clear();
+                    return View(model);
+                }
+            }
+
+            //not valid 
+            return View(model);
+        }
+
+        public ActionResult RegionEdit(int id)
+        {
+            ViewBag.PageTitle = "Edit Region";
+            ViewBag.Message = "";
+
+            var regionRepository = new AppCore.Region.RegionRepository<AppCore.Region.Region>(ConfigurationManager.ConnectionStrings["DefaultConnection"].ToString());
+            var region = regionRepository.FindById(id);
+
+            if (region.IsEmpty())
+            {
+                return HttpNotFound();
+            }
+
+            RegionEditViewModel model = new RegionEditViewModel()
+            {
+                RegionID = region.RegionID,
+                RegionDescription = region.RegionDescription
+            };
+
+            return View(model);
+        }
+        [HttpPost, ValidateAntiForgeryToken]
+        public async Task<ActionResult> RegionEdit(RegionEditViewModel model, FormCollection form)
+        {
+            var regionRepository = new AppCore.Region.RegionRepository<AppCore.Region.Region>(ConfigurationManager.ConnectionStrings["DefaultConnection"].ToString());
+
+            if (ModelState.IsValid)
+            {
+                var region = regionRepository.FindById(model.RegionID);
+
+                if (region.IsEmpty())
+                {
+                    return HttpNotFound();
+                }
+
+                region.RegionDescription = model.RegionDescription;
+                var result = await regionRepository.UpdateAsync(region);
+                if (result)
+                {
+                    ViewBag.Message = "Region Update";
+                    return View(model);
+                }
+
+                ModelState.AddModelError("", new Exception("failed to update region"));
+            }
+
+            //is not valid
+            return View(model);
+        }
+
+        public ActionResult RegionDelete(int id)
+        {
+            ViewBag.PageTitle = "Delete Region";
+            ViewBag.Message = "";
+
+            var regionRepository = new AppCore.Region.RegionRepository<AppCore.Region.Region>(ConfigurationManager.ConnectionStrings["DefaultConnection"].ToString());
+            var region = regionRepository.FindById(id);
+
+            if (region.IsEmpty())
+            {
+                return HttpNotFound();
+            }
+
+            RegionDeleteViewModel model = new RegionDeleteViewModel()
+            {
+                RegionID = region.RegionID,
+                RegionDescription = region.RegionDescription
+            };
+
+            return View(model);
+        }
+        [HttpPost, ActionName("RegionDelete"), ValidateAntiForgeryToken]
+        public async Task<ActionResult> RegionDeleteConfirm(int id, FormCollection form)
+        {
+            var regionRepository = new AppCore.Region.RegionRepository<AppCore.Region.Region>(ConfigurationManager.ConnectionStrings["DefaultConnection"].ToString());
+            var region = regionRepository.FindById(id);
+
+            if (!region.IsEmpty())
+            {
+                var result = await regionRepository.DeleteAsync(region);
+
+                if (result)
+                {
+                    ViewBag.Message = "region deleted!";
+                    var model = new RegionDeleteViewModel();
+                    model.ShowDeleteButton = false;
+                    //ModelState.Clear();
+                    return View(model);
+                }
+
+                return RedirectToAction("Regions", "Admin");
             }
 
             // Not Found
